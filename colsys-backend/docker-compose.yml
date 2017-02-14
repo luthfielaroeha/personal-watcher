@@ -1,0 +1,24 @@
+version: "3"
+
+services:
+    app:
+        container_name: "colsys-graphql"
+        image: golang:latest
+        volumes: 
+            - ./graphql:/go/src/colsys-api
+        working_dir: /go/src/colsys-api
+        command: bash -c "go get -d -v; go install -v .; colsys-api"
+        tty: true
+        ports: 
+            - "8080:8080"
+        links:
+            - postgres
+    postgres:
+        container_name: "colsys-db"
+        image: postgres:latest
+        volumes:
+            - ./postgresql/data:/var/lib/postgresql/data
+            - ./postgresql/shared_folder:/home
+        ports: 
+            - "5432:5432"
+

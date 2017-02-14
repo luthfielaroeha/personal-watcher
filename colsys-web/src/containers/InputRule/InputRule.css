@@ -1,0 +1,14 @@
+.ruleinput.sensor {
+	width: 46%;
+	margin-right: 3%;
+}
+
+.ruleinput.operator {
+	width: 17%;
+	margin-right: 3%;
+}
+
+.ruleinput.value {
+	width: 18%;
+	margin-right:3%;
+}

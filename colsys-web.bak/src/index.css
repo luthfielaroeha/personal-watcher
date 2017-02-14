@@ -1,0 +1,11 @@
+.contentSegment {
+	padding:0 !important;
+}
+
+.contentSegment .listItem {
+	padding: .5em .5em .5em 1em !important;
+}
+
+.smallButton {
+	font-size:.78571429em !important;
+}

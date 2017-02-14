@@ -1,0 +1,33 @@
+#personal-layout .trigger {
+	font-size: 18px;
+	line-height: 47px;
+	padding: 0 16px;
+	cursor: pointer;
+	transition: color .3s;
+}
+
+#personal-layout .trigger:hover {
+	color: #108ee9;
+}
+
+#personal-layout .logo {
+	height: 32px;
+	line-height: 32px;
+	background: #333;
+	border-radius: 6px;
+	margin: 16px;
+	color: #fff;
+	text-align:center;
+}
+
+#personal-layout .ant-layout-sider-collapsed .anticon {
+	font-size: 16px;
+}
+
+#personal-layout .ant-layout-sider-collapsed .nav-text {
+	display: none;
+}
+
+#container-layout {
+	min-height: 100vh;
+}
