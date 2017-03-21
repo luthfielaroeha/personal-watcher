@@ -1,23 +1,29 @@
 package colsys
 
 import (
-	"github.com/jackc/pgx"
 	"os"
 	"fmt"
+
+	"github.com/jackc/pgx"
+	sq "github.com/Masterminds/squirrel"
 )
 
-var conn *pgx.Conn
+var conn *pgx.ConnPool
+
+var psql sq.StatementBuilderType
 
 func init() {
 	var err error
-	conn, err = pgx.Connect(extractConfig())
+	conn, err = pgx.NewConnPool(extractConfig())
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
 		os.Exit(1)
 	}
+
+	psql = sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
 }
 
-func extractConfig() pgx.ConnConfig {
+func extractConfig() pgx.ConnPoolConfig {
 	var config pgx.ConnConfig
 
 	config.Host = os.Getenv("COLSYS_DB_HOST")
@@ -35,8 +41,13 @@ func extractConfig() pgx.ConnConfig {
 
 	config.Database = os.Getenv("COLSYS_DB_DATABASE")
 	if config.Database == "" {
-		config.Database = "postgres"
+		config.Database = "colsys"
 	}
 
-	return config
+	connPoolConfig := pgx.ConnPoolConfig{
+		ConnConfig: config,
+		MaxConnections: 5,
+	}
+
+	return connPoolConfig
 }

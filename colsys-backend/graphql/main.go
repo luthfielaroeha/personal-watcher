@@ -25,6 +25,10 @@ func main() {
 	}))
 
 	http.Handle("/graphql", &relay.Handler{Schema: schema})
+	http.Handle("/jsonSchema", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		jsonSchema, _ := schema.ToJSON()
+		w.Write(jsonSchema)
+	}))
 
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }

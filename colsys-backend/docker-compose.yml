@@ -7,7 +7,6 @@ services:
         volumes: 
             - ./graphql:/go/src/colsys-api
         working_dir: /go/src/colsys-api
-        command: bash -c "go get -d -v; go install -v .; colsys-api"
         tty: true
         ports: 
             - "8080:8080"

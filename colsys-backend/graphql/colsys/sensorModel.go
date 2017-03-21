@@ -1,8 +1,46 @@
 package colsys
 
 import (
+	"log"
+	"time"
+
 	graphql "github.com/neelance/graphql-go"
+	sq "github.com/Masterminds/squirrel"
+	pgx "github.com/jackc/pgx"
 )
+
+func sensorQuery() *sq.SelectBuilder {
+	query := psql.Select("id, connection, name, type, status").From("sensor").Where("isDeleted=?", false).OrderBy("updatedAt DESC")
+	return &query
+}
+
+func updateSensor() *sq.UpdateBuilder {
+	query := psql.Update("sensor").
+			Set("updatedAt", time.Now())
+
+	return &query
+}
+
+func scanSensor(row *pgx.Row, s *sensor) error {
+	err := row.Scan(&s.ID, &s.Connection, &s.Name, &s.Type, &s.Status)
+	
+	return err
+}
+
+func buildSensorMap(Sensor *sensorInput) map[string]interface{} {
+	sensorData := sq.Eq{
+		"connection": Sensor.Connection,
+		"name": Sensor.Name,
+		"Type": Sensor.Type,
+		"Status": Sensor.Status,
+	}
+
+	return sensorData
+}
+
+func sensorReturnField() string {
+	return "RETURNING id, connection, name, type, status"
+}
 
 type sensor struct {
 	ID     graphql.ID
@@ -10,65 +48,94 @@ type sensor struct {
 	Name   string
 	Type string
 	Status bool
-	SensorData []string
 }
 
-var sensors = []*sensor{
-	{
-		ID:     "3000",
-		Connection: "127.0.0.1",
-		Name:   "Sensor 1",
-		Type:   "DATA",
-		Status:   true,
-		SensorData: []string{"20", "15", "17", "19", "24"},
-	},
-	{
-		ID:     "3001",
-		Connection: "127.0.0.1",
-		Name:   "Sensor 2",
-		Type:   "DATA",
-		Status:   true,
-		SensorData: []string{"17", "19", "20", "15", "24"},
-	},
-	{
-		ID:     "3001",
-		Connection: "127.0.0.1",
-		Name:   "Sensor 2",
-		Type:   "DATA",
-		Status:   true,
-		SensorData: []string{"17", "15", "19", "20", "24"},
-	},
-	{
-		ID:     "3001",
-		Connection: "127.0.0.1",
-		Name:   "Sensor 2",
-		Type:   "DATA",
-		Status:   true,
-		SensorData: []string{"20", "19", "24", "17", "15"},
-	},
-}
-
-var sensorData = make(map[graphql.ID]*sensor)
-
-func init() {
-	for _, s := range sensors {
-		sensorData[s.ID] = s
-	}
+type sensorInput struct {
+	Connection *string
+	Name *string
+	Type *string
+	Status *bool
 }
 
 func (r *Resolver) Sensors() *[]*sensorResolver {
-	var s []*sensorResolver
-	for _, sensor := range sensors {
-		s = append(s, &sensorResolver{sensor})
+	query, params, err := sensorQuery().ToSql()
+	rows, err := conn.Query(query, params...)
+	if err != nil {
+		log.Print(err)
 	}
-	return &s
+
+	defer rows.Close()
+
+	var sensors []*sensorResolver
+	for rows.Next() {
+		var s sensor
+		err = rows.Scan(&s.ID, &s.Connection, &s.Name, &s.Type, &s.Status)
+		if err != nil {
+			log.Print(err)
+		}
+		sensors = append(sensors, &sensorResolver{&s})
+	}
+
+	return &sensors
 }
 
 func (r *Resolver) Sensor(args *struct{ ID graphql.ID }) *sensorResolver {
-	if s := sensorData[args.ID]; s != nil {
-		return &sensorResolver{s}
+	var s sensor
+	query, params, _ := sensorQuery().Where("id=?", args.ID).ToSql()
+
+	err := scanSensor(conn.QueryRow(query, params...), &s)
+	if err != nil {
+		log.Print(err)
 	}
-	return nil
+
+	return &sensorResolver{&s}
+}
+
+func (r *Resolver) CreateSensor(args *struct { Sensor *sensorInput }) *sensorResolver {
+	var s sensor
+	query, params, _ := psql.Insert("sensor").
+						SetMap(buildSensorMap(args.Sensor)).
+						Suffix(sensorReturnField()).ToSql()
+	
+	err := scanSensor(conn.QueryRow(query, params...), &s)
+	if err != nil {
+		log.Print(err)
+	}
+
+	return &sensorResolver{&s}
+}
+
+func (r *Resolver) UpdateSensor(args *struct { 
+	ID graphql.ID
+	Sensor *sensorInput 
+}) *sensorResolver {
+	var s sensor
+	query, params, _ := updateSensor().
+						SetMap(buildSensorMap(args.Sensor)).
+						Where("id=?", args.ID).
+						Suffix(sensorReturnField()).ToSql()
+	
+	err := scanSensor(conn.QueryRow(query, params...), &s)
+	if err != nil {
+		log.Print(err)
+	}
+
+	return &sensorResolver{&s}
+}
+
+func (r *Resolver) DeleteSensor(args *struct { ID graphql.ID }) *sensorResolver {
+	var s sensor
+	query, params, _ := updateSensor().
+						SetMap(sq.Eq{"isDeleted":true}).
+						Where("id=?", args.ID).
+						Suffix(sensorReturnField()).ToSql()
+	
+	err := scanSensor(conn.QueryRow(query, params...), &s)
+	if err != nil {
+		log.Print(err)
+	}
+
+	return &sensorResolver{&s}
 }
 
 type sensorResolver struct {
@@ -94,9 +161,4 @@ func (s *sensorResolver) Type() string {
 func (s *sensorResolver) Status() bool {
 	return s.s.Status
 }
-
-func (s *sensorResolver) SensorData() *[]string {
-	return &s.s.SensorData
-}
-
 

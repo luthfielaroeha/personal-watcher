@@ -9,6 +9,7 @@
     "antd": "^2.6.4",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
+    "react-relay": "^0.10.0",
     "recharts": "^0.20.5"
   },
   "scripts": {

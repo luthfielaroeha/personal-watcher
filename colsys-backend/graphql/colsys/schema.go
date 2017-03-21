@@ -3,6 +3,7 @@ package colsys
 var Schema = `
 	schema {
 		query: Query
+		mutation: Mutation
 	}
 
 	# The query type, represents all of the entry points into our object graph
@@ -11,6 +12,20 @@ var Schema = `
 		action(id: ID!): Action
 		sensors: [Sensor]
 		sensor(id: ID!): Sensor
+		rules: [Rule]
+		rule(id: ID!): Rule
+	}
+	
+	type Mutation {
+		createAction(action: ActionInput): Action
+		updateAction(id: ID!, action: ActionInput): Action
+		deleteAction(id: ID!): Action
+		createSensor(sensor: SensorInput): Sensor
+		updateSensor(id: ID!, sensor: SensorInput): Sensor
+		deleteSensor(id: ID!): Sensor
+		createRule(rule: RuleInput): Rule
+		updateRule(id: ID!, rule: RuleInput): Rule
+		deleteRule(id: ID!): Rule
 	}
 
 	# List of action 
@@ -19,6 +34,12 @@ var Schema = `
 		name: String
 		callbackFn: String!
 	}
+
+	input ActionInput {
+		name: String
+		callbackFn: String
+	}
+
 
 	type Sensor {
 		# The ID of the sensor
@@ -32,7 +53,6 @@ var Schema = `
 		# Is this sensor active 
 		status: Boolean!
 		# Data of the sensor
-		sensorData: [String!]
 		# The sensor data exposed as a connection with edges
 	}
 
@@ -41,6 +61,26 @@ var Schema = `
 		DATA
 		# Sensor with data representation using time
 		TIME
+	}
+
+	input SensorInput {
+		connection: String
+		name: String
+		type: SensorType
+		status: Boolean
+	}
+
+	type Rule {
+		id: ID!
+		name: String!
+		index: Int
+		status: Boolean
+	}
+
+	input RuleInput {
+		name: String
+		index: Int
+		status: Boolean
 	}
 `
 

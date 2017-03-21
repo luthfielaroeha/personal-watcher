@@ -5,7 +5,7 @@ CREATE TABLE action (
 	name VARCHAR(20),
 	callbackFn TEXT,
 	updatedAt TIMESTAMPTZ DEFAULT now(),
-	isDeleted BOOL
+	isDeleted BOOL DEFAULT false
 );
 
 CREATE TABLE sensor (
@@ -15,7 +15,7 @@ CREATE TABLE sensor (
 	type VARCHAR(10),
 	status BOOL,
 	updatedAt TIMESTAMPTZ DEFAULT now(),
-	isDeleted BOOL
+	isDeleted BOOL DEFAULT false
 );
 
 CREATE TABLE rule (
@@ -24,7 +24,7 @@ CREATE TABLE rule (
 	index INT,
 	status BOOL,
 	updatedAt TIMESTAMPTZ DEFAULT now(),
-	isDeleted BOOL
+	isDeleted BOOL DEFAULT false
 );
 
 CREATE TABLE ruleDetail (
@@ -33,6 +33,6 @@ CREATE TABLE ruleDetail (
 	sensorID UUID,
 	comparator VARCHAR(5),
 	updatedAt TIMESTAMPTZ DEFAULT now(),
-	isDeleted BOOL
+	isDeleted BOOL DEFAULT false
 );
 

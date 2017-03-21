@@ -1,9 +1,24 @@
 package colsys
 
 import (
+	"log"
+	"time"
+
 	graphql "github.com/neelance/graphql-go"
-	"fmt"
+	sq "github.com/Masterminds/squirrel"
 )
+
+func actionQuery() *sq.SelectBuilder {
+	query := psql.Select("id, name, callbackFn").From("action").Where("isDeleted=?", false).OrderBy("updatedAt DESC")
+	return &query
+}
+
+func updateAction() *sq.UpdateBuilder {
+	query := psql.Update("action").
+			Set("updatedAt", time.Now())
+	
+	return &query
+}
 
 type action struct {
 	id        graphql.ID
@@ -11,10 +26,16 @@ type action struct {
 	callbackFn string
 }
 
+type actionInput struct {
+	Name *string
+	CallbackFn *string
+}
+
 func (r *Resolver) Actions() *[]*actionResolver {
-	rows, err := conn.Query("SELECT id, name, callbackFn FROM action WHERE isDeleted=false")
+	query, params, err := actionQuery().ToSql()
+	rows, err := conn.Query(query, params...)
 	if err != nil {
-		log.Fatal(err)
+		log.Print(err)
 	}
 
 	defer rows.Close()
@@ -24,9 +45,9 @@ func (r *Resolver) Actions() *[]*actionResolver {
 		var a action
 		err = rows.Scan(&a.id, &a.name, &a.callbackFn)
 		if err != nil {
-			log.Fatal(err)
+			log.Print(err)
 		}
-		actions = append(actions, &actionResolver{a})
+		actions = append(actions, &actionResolver{&a})
 	}
 
 	return &actions
@@ -34,12 +55,62 @@ func (r *Resolver) Actions() *[]*actionResolver {
 
 func (r *Resolver) Action(args *struct{ ID graphql.ID }) *actionResolver {
 	var a action
-	err := conn.QueryRow("SELECT id, name, callbackFn FROM action WHERE id=$1 AND isDeleted=false", args.ID).Scan(&a.id, &a.name, &a.description)
+	query, params, _ := actionQuery().Where("id=?", args.ID).ToSql()
+
+	err := conn.QueryRow(query, params...).Scan(&a.id, &a.name, &a.callbackFn)
 	if err != nil {
-		log.Fatal(err)
+		log.Print(err)
 	}
 
-	return &actionResolver{a}
+	return &actionResolver{&a}
+}
+
+func (r *Resolver) CreateAction(args *struct { Action *actionInput }) *actionResolver {
+	var a action
+	query, params, _ := psql.Insert("action").Columns("name", "callbackFn").
+						Values(args.Action.Name, args.Action.CallbackFn).
+						Suffix("RETURNING id, name, callbackFn").ToSql()
+	
+	err := conn.QueryRow(query, params...).Scan(&a.id, &a.name, &a.callbackFn)
+	if err != nil {
+		log.Print(err)
+	}
+
+	return &actionResolver{&a}
+}
+
+func (r *Resolver) UpdateAction(args *struct { 
+	ID graphql.ID
+	Action *actionInput 
+}) *actionResolver {
+	var a action
+	query, params, _ := updateAction().
+						Set("name", args.Action.Name).
+						Set("callbackFn", args.Action.CallbackFn).
+						Where("id=?", args.ID).
+						Suffix("RETURNING id, name, callbackFn").ToSql()
+	
+	err := conn.QueryRow(query, params...).Scan(&a.id, &a.name, &a.callbackFn)
+	if err != nil {
+		log.Print(err)
+	}
+
+	return &actionResolver{&a}
+}
+
+func (r *Resolver) DeleteAction(args *struct { ID graphql.ID }) *actionResolver {
+	var a action
+	query, params, _ := updateAction().
+						SetMap(sq.Eq{"isDeleted":true}).
+						Where("id=?", args.ID).
+						Suffix("RETURNING id, name, callbackFn").ToSql()
+	
+	err := conn.QueryRow(query, params...).Scan(&a.id, &a.name, &a.callbackFn)
+	if err != nil {
+		log.Print(err)
+	}
+
+	return &actionResolver{&a}
 }
 
 type actionResolver struct {
@@ -47,29 +118,14 @@ type actionResolver struct {
 }
 
 func (a *actionResolver) ID() graphql.ID {
-	return a.a.ID
+	return a.a.id
 }
 
 func (a *actionResolver) Name() *string {
-	return &a.a.Name
+	return &a.a.name
 }
 
 func (a *actionResolver) CallbackFn() string {
-	return a.a.CallbackFn
-}
-
-func addAction(name string, description string) error {
-	_, err := conn.Exec("INSERT INTO action(name, description) VALUES($1, $2)", name, description)
-	return err
-}
-
-func updateAction(id graphql.ID, name string, description string) error {
-	_, err := conn.Exec("UPDATE action SET name=$1, description=$2 WHERE id=$3", name, description, id)
-	return err
-}
-
-func removeAction(id graphql.ID) error {
-	_, err := conn.Exec("UPDATE action SET isDeleted=true WHERE id=$1", id)
-	return err
+	return a.a.callbackFn
 }
 
