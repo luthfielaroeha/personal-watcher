@@ -6,7 +6,7 @@ then
 fi
 if [ ! $2 ] 
 then
-	topic="mqtt"
+	topic="gedung/sensor1"
 fi
 if [ ! $3 ] 
 then

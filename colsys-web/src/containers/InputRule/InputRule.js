@@ -4,11 +4,11 @@ import { InputNumber, Select } from 'antd';
 import './InputRule.css'
 
 const comparison = {
-	"=": "e",
-	"<": "l",
-	"<=": "le",
-	">=": "ge",
-	">": "g"
+	"=": "eq",
+	"<": "lt",
+	"<=": "lte",
+	">=": "gte",
+	">": "gt"
 }
 
 export default class InputRule extends Component {
@@ -104,9 +104,9 @@ export default class InputRule extends Component {
 					className='ruleinput operator'
 				>
 					<Select.Option value="lt">&lt;</Select.Option>
-					<Select.Option value="le">&le;</Select.Option>
-					<Select.Option value="e">=</Select.Option>
-					<Select.Option value="ge">&ge;</Select.Option>
+					<Select.Option value="lte">&le;</Select.Option>
+					<Select.Option value="eq">=</Select.Option>
+					<Select.Option value="gte">&ge;</Select.Option>
 					<Select.Option value="gt">&gt;</Select.Option>
 				</Select>
 				<InputNumber placeholder='value'

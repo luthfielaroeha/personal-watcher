@@ -1,12 +1,7 @@
-CREATE EXTENSION IF NOT EXISTS pgcrypto;  
-
-DROP TABLE action;
-DROP TABLE sensor;
-DROP TABLE rule;
-DROP TABLE ruleDetail;
+CREATE EXTENSION pgcrypto;  
 
 CREATE TABLE action (
-	id SERIAL PRIMARY KEY,
+	id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 	name VARCHAR(20),
 	callbackFn TEXT,
 	updatedAt TIMESTAMPTZ DEFAULT now(),
@@ -14,7 +9,7 @@ CREATE TABLE action (
 );
 
 CREATE TABLE sensor (
-	id SERIAL PRIMARY KEY,
+	id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 	connection VARCHAR(100),
 	name VARCHAR(50),
 	type VARCHAR(10),
@@ -24,19 +19,16 @@ CREATE TABLE sensor (
 );
 
 CREATE TABLE rule (
-	id SERIAL PRIMARY KEY,
-	actionID INT,
+	id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 	name VARCHAR(50),
 	index INT,
-	status BOOL, 
-	updatedAt TIMESTAMPTZ DEFAULT now(), 
-	isDeleted BOOL DEFAULT false
+	status BOOL, updatedAt TIMESTAMPTZ DEFAULT now(), isDeleted BOOL DEFAULT false
 );
 
 CREATE TABLE ruleDetail (
-	id SERIAL PRIMARY KEY,
-	ruleID INT,
-	sensorID INT,
+	id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+	ruleID UUID,
+	sensorID UUID,
 	operator VARCHAR(5),
 	numberValue INT,
 	updatedAt TIMESTAMPTZ DEFAULT now(),

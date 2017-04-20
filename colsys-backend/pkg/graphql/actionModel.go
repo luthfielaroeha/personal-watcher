@@ -57,6 +57,7 @@ func (r *Resolver) Action(args *struct{ ID graphql.ID }) *actionResolver {
 	var a action
 	query, params, _ := actionQuery().Where("id=?", args.ID).ToSql()
 
+	log.Print(params)
 	err := conn.QueryRow(query, params...).Scan(&a.id, &a.name, &a.callbackFn)
 	if err != nil {
 		log.Print(err)

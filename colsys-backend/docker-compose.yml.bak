@@ -1,12 +1,19 @@
 version: "3"
 
 services:
-    go:
-        container_name: "colsys-backend"
+    AI: 
+        container_name: "colsys-ai"
         image: golang:latest
         volumes: 
-            - .:/go/src/colsys-backend
-        working_dir: /go/src/colsys-backend
+            - ./AutoAI:/go/src/AutoAI
+        working_dir: /go/src/AutoAI
+        tty: true
+    app:
+        container_name: "colsys-graphql"
+        image: golang:latest
+        volumes: 
+            - ./graphql:/go/src/colsys-api
+        working_dir: /go/src/colsys-api
         tty: true
         ports: 
             - "8080:8080"

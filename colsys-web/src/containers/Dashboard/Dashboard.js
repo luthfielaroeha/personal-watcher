@@ -1,9 +1,25 @@
 import React, { Component } from 'react';
 import { Col, Row } from 'antd';
 
+import { createClient } from '../../libraries/PersonalMQTT';
+
 import SensorCard from '../SensorCard';
 import RuleCard from '../RuleCard';
 import SensorChart from '../SensorChart';
+
+const mqttConfig = {
+	url: 'ws://localhost:9001',
+	opt: {
+		clientId: 'colsysWeb-' + Date.now(),
+	},
+};
+
+const personalMQTT = createClient(mqttConfig);
+const actionTopicMapping = {
+	  'SENSOR_DATA': 'building/#',
+};
+
+personalMQTT.connect(actionTopicMapping);
 
 class Dashboard extends Component { 
 	render() {

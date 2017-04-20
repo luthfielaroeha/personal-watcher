@@ -5,9 +5,16 @@ import (
 	"time"
 
 	graphql "github.com/neelance/graphql-go"
+	"github.com/neelance/graphql-go/relay"
 	sq "github.com/Masterminds/squirrel"
 	pgx "github.com/jackc/pgx"
 )
+
+var sensorKind string
+
+func init() {
+	sensorKind = "sensor"
+}
 
 func sensorQuery() *sq.SelectBuilder {
 	query := psql.Select("id, connection, name, type, status").From("sensor").Where("isDeleted=?", false).OrderBy("updatedAt DESC")
@@ -22,7 +29,9 @@ func updateSensor() *sq.UpdateBuilder {
 }
 
 func scanSensor(row *pgx.Row, s *sensor) error {
-	err := row.Scan(&s.ID, &s.Connection, &s.Name, &s.Type, &s.Status)
+	var tempID int
+	err := row.Scan(&tempID, &s.Connection, &s.Name, &s.Type, &s.Status)
+	s.ID = relay.MarshalID(sensorKind, tempID)
 	
 	return err
 }
@@ -67,9 +76,11 @@ func (r *Resolver) Sensors() *[]*sensorResolver {
 	defer rows.Close()
 
 	var sensors []*sensorResolver
+	var tempID int
 	for rows.Next() {
 		var s sensor
-		err = rows.Scan(&s.ID, &s.Connection, &s.Name, &s.Type, &s.Status)
+		err = rows.Scan(&tempID, &s.Connection, &s.Name, &s.Type, &s.Status)
+		s.ID = relay.MarshalID(sensorKind, tempID)
 		if err != nil {
 			log.Print(err)
 		}
@@ -81,7 +92,9 @@ func (r *Resolver) Sensors() *[]*sensorResolver {
 
 func (r *Resolver) Sensor(args *struct{ ID graphql.ID }) *sensorResolver {
 	var s sensor
-	query, params, _ := sensorQuery().Where("id=?", args.ID).ToSql()
+	var id int
+	relay.UnmarshalSpec(args.ID, &id)
+	query, params, _ := sensorQuery().Where("id=?", id).ToSql()
 
 	err := scanSensor(conn.QueryRow(query, params...), &s)
 	if err != nil {
