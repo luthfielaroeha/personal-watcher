@@ -1,4 +1,4 @@
-package colsys
+package graphql
 
 import (
 	"os"

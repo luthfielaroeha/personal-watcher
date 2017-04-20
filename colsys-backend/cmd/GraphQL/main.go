@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/neelance/graphql-go"
-	colsys "go-backend/pkg/graphql"
+	colsys "github.com/luthfielaroeha/personal-watcher/colsys-backend/pkg/graphql"
 	"github.com/neelance/graphql-go/relay"
 )
 

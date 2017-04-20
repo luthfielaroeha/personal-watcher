@@ -60,7 +60,6 @@ func Sensors() ([]*domain.Sensor) {
 		}
 		sensors = append(sensors, &s)
 	}
-
 	return sensors
 }
 
@@ -81,7 +80,7 @@ func CreateSensor(newSensor *domain.Sensor) *domain.Sensor {
 	query, params, _ := psql.Insert("sensor").
 						SetMap(buildSensorMap(newSensor)).
 						Suffix(sensorReturnField()).ToSql()
-	
+
 	err := scanSensor(conn.QueryRow(query, params...), &s)
 	if err != nil {
 		log.Print(err)
@@ -90,33 +89,32 @@ func CreateSensor(newSensor *domain.Sensor) *domain.Sensor {
 	return &s
 }
 
-func UpdateSensor(ID int, newSensor *domain.Sensor) (*domain.Sensor, error) {
+func UpdateSensor(ID int, newSensor *domain.Sensor) *domain.Sensor {
 	var s domain.Sensor
 	query, params, _ := updateSensor().
 						SetMap(buildSensorMap(newSensor)).
 						Where("id=?", ID).
 						Suffix(sensorReturnField()).ToSql()
-	
+
 	err := scanSensor(conn.QueryRow(query, params...), &s)
 	if err != nil {
 		log.Print(err)
-		return nil, err
 	}
 
-	return &s, nil
+	return &s
 }
 
-func DeleteSensor(ID int) (*domain.Sensor, error) {
+func DeleteSensor(ID int) *domain.Sensor {
 	var s domain.Sensor
 	query, params, _ := updateSensor().
 						SetMap(sq.Eq{"isDeleted":true}).
 						Where("id=?", ID).
 						Suffix(sensorReturnField()).ToSql()
-	
+
 	err := scanSensor(conn.QueryRow(query, params...), &s)
 	if err != nil {
-		return nil, err
+		log.Print(err)
 	}
 
-	return &s, nil
+	return &s
 }
