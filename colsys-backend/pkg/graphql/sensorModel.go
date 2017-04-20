@@ -24,12 +24,6 @@ type sensorInput struct {
 	Status *bool
 }
 
-func unmarshalID(ID graphql.ID) int {
-	var id int
-	relay.UnmarshalSpec(ID, &id)
-	return id
-}
-
 func sensorInputToDomain(sensorInput *sensorInput) *domain.Sensor {
 	sensor := domain.Sensor{
 				Connection: *sensorInput.Connection,

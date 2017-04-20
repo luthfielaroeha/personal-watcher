@@ -86,3 +86,8 @@ var Schema = `
 
 type Resolver struct{}
 
+func unmarshalID(ID graphql.ID) int {
+	var id int
+	relay.UnmarshalSpec(ID, &id)
+	return id
+}
