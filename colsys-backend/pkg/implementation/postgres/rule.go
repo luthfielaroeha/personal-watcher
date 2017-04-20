@@ -4,7 +4,7 @@ import (
 	"log"
 	"time"
 
-	"go-backend/pkg/domain"
+	"github.com/luthfielaroeha/personal-watcher/colsys-backend/pkg/domain"
 
 	sq "github.com/Masterminds/squirrel"
 	pgx "github.com/jackc/pgx"

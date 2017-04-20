@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"sync"
 
-	"go-backend/pkg/implementation/postgres"
+	"github.com/luthfielaroeha/personal-watcher/colsys-backend/pkg/implementation/postgres"
 
 	MQTT "github.com/eclipse/paho.mqtt.golang"
 )

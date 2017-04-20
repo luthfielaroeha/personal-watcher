@@ -5,8 +5,8 @@ import (
 	"time"
 	"strings"
 
-	"go-backend/pkg/domain"
-	"go-backend/pkg/implementation/postgres"
+	"github.com/luthfielaroeha/personal-watcher/colsys-backend/pkg/domain"
+	"github.com/luthfielaroeha/personal-watcher/colsys-backend/pkg/implementation/postgres"
 
 	"github.com/oleksandr/conditions"
 )
