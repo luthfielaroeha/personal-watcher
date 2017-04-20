@@ -1,9 +1,6 @@
 package graphql
 
 import (
-	"log"
-	"time"
-
 	graphql "github.com/neelance/graphql-go"
 	"github.com/neelance/graphql-go/relay"
 	"github.com/luthfielaroeha/personal-watcher/colsys-backend/pkg/implementation/postgres"
@@ -30,30 +27,24 @@ type sensorInput struct {
 func unmarshalID(ID graphql.ID) int {
 	var id int
 	relay.UnmarshalSpec(ID, &id)
-	log.Print(id)
-	log.Print(ID)
 	return id
 }
 
 func sensorInputToDomain(sensorInput *sensorInput) *domain.Sensor {
 	sensor := domain.Sensor{
-				Connection: sensorInput.Connection,
-				Name: sensorInput.Name,
-				Type: sensorInput.Type,
-				Status: sensorInput.Status,
+				Connection: *sensorInput.Connection,
+				Name: *sensorInput.Name,
+				Type: *sensorInput.Type,
+				Status: *sensorInput.Status,
 			}
 	return &sensor
 }
 
 func (r *Resolver) Sensors() *[]*sensorResolver {
 	var sensors []*sensorResolver
-	var sensorsData := postgres.Sensors()
+	sensorsData := postgres.Sensors()
 	for i := range sensorsData {
-		if err != nil {
-			log.Print(err)
-		}
-		sensors = append(sensors, &sensorResolver{&sensorsData[i]},
-		})
+		sensors = append(sensors, &sensorResolver{sensorsData[i]})
 	}
 
 	return &sensors
@@ -65,8 +56,8 @@ func (r *Resolver) Sensor(args *struct{ ID graphql.ID }) *sensorResolver {
 }
 
 func (r *Resolver) CreateSensor(args *struct { Sensor *sensorInput }) *sensorResolver {
-	sensorData := sensorInputToDomain(Sensor)
-	s := postgres.CreateSensor(&sensorData)
+	sensorData := sensorInputToDomain(args.Sensor)
+	s := postgres.CreateSensor(sensorData)
 	return &sensorResolver{s}
 }
 
@@ -74,7 +65,7 @@ func (r *Resolver) UpdateSensor(args *struct {
 	ID graphql.ID
 	Sensor *sensorInput
 }) *sensorResolver {
-	sensorData := sensorInputToDomain(Sensor)
+	sensorData := sensorInputToDomain(args.Sensor)
 	s := postgres.UpdateSensor(unmarshalID(args.ID), sensorData)
 
 	return &sensorResolver{s}
