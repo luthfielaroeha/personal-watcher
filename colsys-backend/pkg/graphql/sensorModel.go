@@ -30,6 +30,8 @@ type sensorInput struct {
 func unmarshalID(ID graphql.ID) int {
 	var id int
 	relay.UnmarshalSpec(ID, &id)
+	log.Print(id)
+	log.Print(ID)
 	return id
 }
 
