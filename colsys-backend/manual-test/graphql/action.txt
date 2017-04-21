@@ -1,0 +1,47 @@
+{
+	actions {
+		id
+		name
+		callbackFn
+	}
+}
+
+{
+	action(id: "c2Vuc29yOjE=") {
+		id
+		name
+		callbackFn
+	}
+}
+
+mutation CreateAction {
+	createAction(action: {
+		name: "New Action"
+		callbackFn: "callbackFn1"
+	}) {
+		id
+		name
+		callbackFn
+	}
+}
+
+mutation UpdateAction {
+	updateAction(
+	id: "c2Vuc29yOjE="
+	action: {
+		name: "Updated Action"
+		callbackFn: "updatedcallbackFn"
+	}) {
+		id
+		name
+		callbackFn
+	}
+}
+
+mutation DeleteAction {
+	deleteAction(id: "c2Vuc29yOjE=") {
+		id
+		name
+		callbackFn
+	}
+}

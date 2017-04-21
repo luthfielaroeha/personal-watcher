@@ -5,8 +5,8 @@ import (
 	"time"
 	"strings"
 
-	"github.com/luthfielaroeha/personal-watcher/colsys-backend/pkg/domain"
-	"github.com/luthfielaroeha/personal-watcher/colsys-backend/pkg/implementation/postgres"
+	"colsys-backend/pkg/domain"
+	"colsys-backend/pkg/implementation/postgres"
 
 	"github.com/oleksandr/conditions"
 )

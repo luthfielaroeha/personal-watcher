@@ -1,5 +1,10 @@
 package graphql
 
+import (
+	graphql "github.com/neelance/graphql-go"
+	"github.com/neelance/graphql-go/relay"
+)
+
 var Schema = `
 	schema {
 		query: Query
@@ -8,37 +13,37 @@ var Schema = `
 
 	# The query type, represents all of the entry points into our object graph
 	type Query {
-		#actions: [Action]
-		#action(id: ID!): Action
+		actions: [Action]
+		action(id: ID!): Action
 		sensors: [Sensor]
 		sensor(id: ID!): Sensor
-		#rules: [Rule]
-		#rule(id: ID!): Rule
+		rules: [Rule]
+		rule(id: ID!): Rule
 	}
 	
 	type Mutation {
-		#createAction(action: ActionInput): Action
-		#updateAction(id: ID!, action: ActionInput): Action
-		#deleteAction(id: ID!): Action
+		createAction(action: ActionInput): Action
+		updateAction(id: ID!, action: ActionInput): Action
+		deleteAction(id: ID!): Action
 		createSensor(sensor: SensorInput): Sensor
 		updateSensor(id: ID!, sensor: SensorInput): Sensor
 		deleteSensor(id: ID!): Sensor
-		#createRule(rule: RuleInput): Rule
-		#updateRule(id: ID!, rule: RuleInput): Rule
-		#deleteRule(id: ID!): Rule
+		createRule(rule: RuleInput): Rule
+		updateRule(id: ID!, rule: RuleInput): Rule
+		deleteRule(id: ID!): Rule
 	}
 
 	# List of action 
-	#type Action {
-		#id: ID!
-		#name: String
-		#callbackFn: String!
-		#}
+	type Action {
+		id: ID!
+		name: String
+		callbackFn: String!
+	}
 
-	#input ActionInput {
-		#name: String
-		#callbackFn: String
-		#}
+	input ActionInput {
+		name: String
+		callbackFn: String
+	}
 
 
 	type Sensor {
@@ -70,18 +75,18 @@ var Schema = `
 		status: Boolean
 	}
 
-	#type Rule {
-		#id: ID!
-		#name: String!
-		#index: Int
-		#status: Boolean
-		#}
+	type Rule {
+		id: ID!
+		name: String!
+		index: Int!
+		status: Boolean
+	}
 
-		#input RuleInput {
-			#name: String
-			#index: Int
-			#status: Boolean
-			#}
+	input RuleInput {
+		name: String
+		index: Int
+		status: Boolean
+	}
 `
 
 type Resolver struct{}

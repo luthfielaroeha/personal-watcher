@@ -4,7 +4,7 @@ type (
 	Rule struct {
 		ID     int
 		Name   string
-		Index  string
+		Index  int
 		Status bool
 		RuleDetails []*RuleDetail
 	}

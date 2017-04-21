@@ -3,9 +3,8 @@ package graphql
 import (
 	graphql "github.com/neelance/graphql-go"
 	"github.com/neelance/graphql-go/relay"
-	"github.com/luthfielaroeha/personal-watcher/colsys-backend/pkg/implementation/postgres"
-	"github.com/luthfielaroeha/personal-watcher/colsys-backend/pkg/domain"
-)
+	"colsys-backend/pkg/implementation/postgres"
+	"colsys-backend/pkg/domain")
 
 var sensorKind string
 

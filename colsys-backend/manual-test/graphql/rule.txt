@@ -1,0 +1,54 @@
+{
+	rules {
+		id
+		name
+		index
+		status
+	}
+}
+
+{
+	rule(id: "cnVsZTox") {
+		id
+		name
+		index
+		status
+	}
+}
+
+mutation CreateRule {
+	createRule(rule: {
+		name: "New Rule"
+		index: 6
+		status: true
+	}) {
+		id
+		name
+		index
+		status
+	}
+}
+
+mutation UpdateRule {
+	updateRule(
+	id: "cnVsZTox"
+	rule: {
+		name: "Updated Rule"
+		index: 7
+		status: false
+	}) {
+		id
+		name
+		index
+		status
+	}
+}
+
+mutation DeleteRule {
+	deleteRule(id: "cnVsZTox") {
+		id
+		name
+		index
+		status
+	}
+}

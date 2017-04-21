@@ -3,8 +3,8 @@ package graphql
 import (
 	graphql "github.com/neelance/graphql-go"
 	"github.com/neelance/graphql-go/relay"
-	"github.com/luthfielaroeha/personal-watcher/colsys-backend/pkg/implementation/postgres"
-	"github.com/luthfielaroeha/personal-watcher/colsys-backend/pkg/domain"
+	"colsys-backend/pkg/implementation/postgres"
+	"colsys-backend/pkg/domain"
 )
 
 var ruleKind string
@@ -19,14 +19,14 @@ type ruleResolver struct {
 
 type ruleInput struct {
 	Name *string
-	Index *string
+	Index *int32
 	Status *bool
 }
 
 func ruleInputToDomain(ruleInput *ruleInput) *domain.Rule {
 	rule := domain.Rule{
 				Name: *ruleInput.Name,
-				Index: *ruleInput.Index,
+				Index: int(*ruleInput.Index),
 				Status: *ruleInput.Status,
 			}
 	return &rule
@@ -76,10 +76,10 @@ func (s *ruleResolver) Name() string {
 	return s.s.Name
 }
 
-func (s *ruleResolver) Index() *int32 {
-	return s.s.Index
+func (s *ruleResolver) Index() int32 {
+	return int32(s.s.Index)
 }
 
 func (s *ruleResolver) Status() *bool {
-	return s.s.Status
+	return &s.s.Status
 }

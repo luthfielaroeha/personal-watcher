@@ -4,7 +4,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/luthfielaroeha/personal-watcher/colsys-backend/pkg/domain"
+	"colsys-backend/pkg/domain"
 
 	sq "github.com/Masterminds/squirrel"
 	pgx "github.com/jackc/pgx"

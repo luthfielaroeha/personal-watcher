@@ -3,8 +3,8 @@ package graphql
 import (
 	graphql "github.com/neelance/graphql-go"
 	"github.com/neelance/graphql-go/relay"
-	"github.com/luthfielaroeha/personal-watcher/colsys-backend/pkg/implementation/postgres"
-	"github.com/luthfielaroeha/personal-watcher/colsys-backend/pkg/domain"
+	"colsys-backend/pkg/implementation/postgres"
+	"colsys-backend/pkg/domain"
 )
 
 var actionKind string
@@ -70,8 +70,8 @@ func (s *actionResolver) ID() graphql.ID {
 	return relay.MarshalID(actionKind, s.s.ID)
 }
 
-func (s *actionResolver) Name() string {
-	return s.s.Name
+func (s *actionResolver) Name() *string {
+	return &s.s.Name
 }
 
 func (s *actionResolver) CallbackFn() string {

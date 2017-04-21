@@ -43,3 +43,12 @@ CREATE TABLE ruleDetail (
 	isDeleted BOOL DEFAULT false
 );
 
+CREATE TABLE user_account (
+	id SERIAL PRIMARY KEY,
+	fullname VARCHAR(50),
+	email VARCHAR(50),
+	password VARCHAR(50),
+	createdAt TIMESTAMPTZ DEFAULT now(),
+	updatedAt TIMESTAMPTZ DEFAULT now(),
+	isDeleted BOOL DEFAULT false
+);

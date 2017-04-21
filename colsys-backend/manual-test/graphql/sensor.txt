@@ -1,0 +1,61 @@
+{
+	sensors {
+		id
+		connection
+		name
+		type
+		status
+	}
+}
+
+{
+	sensor(id: "c2Vuc29yOjE=") {
+		id
+		connection
+		name
+		type
+		status
+	}
+}
+
+mutation CreateSensor {
+	createSensor(sensor: {
+		name: "New Sensor"
+		connection: "10.151.32.129"
+		type: DATA
+		status: true
+	}) {
+		id
+		connection
+		name
+		type
+		status
+	}
+}
+
+mutation UpdateSensor {
+	updateSensor(
+	id: "c2Vuc29yOjE="
+	sensor: {
+		name: "Updated Sensor"
+		connection: "10.151.32.128"
+		type: DATA
+		status: true
+	}) {
+		id
+		connection
+		name
+		type
+		status
+	}
+}
+
+mutation DeleteSensor {
+	deleteSensor(id: "c2Vuc29yOjE=") {
+		id
+		connection
+		name
+		type
+		status
+	}
+}
