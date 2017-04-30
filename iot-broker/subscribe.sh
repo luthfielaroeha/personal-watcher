@@ -7,7 +7,7 @@ else
 fi
 if [ ! $2 ] 
 then
-	topic="mqtt"
+	topic="building/#"
 else
 	topic=$2
 fi

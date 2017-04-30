@@ -78,7 +78,7 @@ class RuleForm extends Component {
 		})
 
 		return (
-			<Form horizontal>
+			<Form layout="horizontal">
 				<Form.Item label='Rule Name' hasFeedback {...formItemLayout}>
 					{getFieldDecorator('name', {
 						initialValue: this.props.item.name,

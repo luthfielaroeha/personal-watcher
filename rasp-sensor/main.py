@@ -7,6 +7,8 @@ import paho.mqtt.client as mqtt
 
 
 sensorID = sys.argv[1]
+minData = int(sys.argv[2])
+maxData = int(sys.argv[3])
 
 sensor_topic = "building/sensor/" + sensorID
 
@@ -24,11 +26,12 @@ client.connect("10.151.32.111", 1883, 60)
 
 i = 0
 while True:
-    sensorVal = random.randint(30,60)
-    sensorData = {'sensorID': sensorID, 'val': sensorVal}
+    sensorVal = random.randint(minData,maxData)
+    now = time.time();
+    sensorData = {'sensorID': sensorID, 'val': sensorVal, 'time': now}
     sensorDataJSON = json.dumps(sensorData)
     client.publish(sensor_topic, sensorDataJSON)
     print("Publish", sensorData, "to", sensor_topic)
     i+=1
-    time.sleep(1)
+    time.sleep(3)
 
