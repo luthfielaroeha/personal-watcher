@@ -21,6 +21,7 @@ type ruleInput struct {
 	Name *string
 	Index *int32
 	Status *bool
+	Rule *string
 }
 
 func ruleInputToDomain(ruleInput *ruleInput) *domain.Rule {
@@ -28,6 +29,7 @@ func ruleInputToDomain(ruleInput *ruleInput) *domain.Rule {
 				Name: *ruleInput.Name,
 				Index: int(*ruleInput.Index),
 				Status: *ruleInput.Status,
+				Rule: *ruleInput.Rule,
 			}
 	return &rule
 }
@@ -82,4 +84,8 @@ func (s *ruleResolver) Index() int32 {
 
 func (s *ruleResolver) Status() *bool {
 	return &s.s.Status
+}
+
+func (s *ruleResolver) Rule() string {
+	return s.s.Rule
 }

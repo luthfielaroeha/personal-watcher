@@ -11,7 +11,7 @@ import (
 )
 
 func ruleQuery() *sq.SelectBuilder {
-	query := psql.Select("id, name, index, status").From("rule").Where("isDeleted=?", false).OrderBy("updatedAt DESC")
+	query := psql.Select("id, rule, name, index, status").From("rule").Where("isDeleted=?", false).OrderBy("updatedAt DESC")
 	return &query
 }
 
@@ -23,7 +23,7 @@ func updateRule() *sq.UpdateBuilder {
 }
 
 func scanRule(row *pgx.Row, rl *domain.Rule) error {
-	err := row.Scan(&rl.ID, &rl.Name, &rl.Index, &rl.Status)
+	err := row.Scan(&rl.ID, &rl.Rule, &rl.Name, &rl.Index, &rl.Status)
 	return err
 }
 
@@ -32,13 +32,14 @@ func buildRuleMap(Rule *domain.Rule) map[string]interface{} {
 		"name": Rule.Name,
 		"index": Rule.Index,
 		"status": Rule.Status,
+		"rule": Rule.Rule,
 	}
 
 	return ruleData
 }
 
 func ruleReturnField() string {
-	return "RETURNING id, name, index, status"
+	return "RETURNING id, rule, name, index, status"
 }
 
 func Rules() []*domain.Rule {
@@ -53,11 +54,10 @@ func Rules() []*domain.Rule {
 	var rules []*domain.Rule
 	for rows.Next() {
 		var rl domain.Rule
-		err = rows.Scan(&rl.ID, &rl.Name, &rl.Index, &rl.Status)
+		err = rows.Scan(&rl.ID, &rl.Rule, &rl.Name, &rl.Index, &rl.Status)
 		if err != nil {
 			log.Print(err)
 		}
-		rl.RuleDetails = RuleDetailsByRule(rl.ID)
 		rules = append(rules, &rl)
 	}
 
@@ -72,7 +72,6 @@ func Rule(ID int) *domain.Rule {
 	if err != nil {
 		log.Print(err)
 	}
-	rl.RuleDetails = RuleDetailsByRule(rl.ID)
 
 	return &rl
 }

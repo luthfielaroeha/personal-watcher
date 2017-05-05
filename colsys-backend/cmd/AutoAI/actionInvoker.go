@@ -27,7 +27,7 @@ func prepareAI() {
 }
 
 func actionInvoker(rule *domain.Rule) {
-	p := conditions.NewParser(strings.NewReader (rule.GetParser()))
+	p := conditions.NewParser(strings.NewReader (rule.Rule))
 
 	expr, err := p.Parse()
 	if err != nil {

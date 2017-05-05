@@ -31,3 +31,7 @@
 #container-layout {
 	min-height: 100vh;
 }
+
+.personal-container {
+	overflow-x: hidden;
+}

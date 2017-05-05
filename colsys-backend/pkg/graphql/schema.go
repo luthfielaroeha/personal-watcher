@@ -80,12 +80,14 @@ var Schema = `
 		name: String!
 		index: Int!
 		status: Boolean
+		rule: String!
 	}
 
 	input RuleInput {
 		name: String
 		index: Int
 		status: Boolean
+		rule: String
 	}
 `
 

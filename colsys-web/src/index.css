@@ -9,6 +9,10 @@
 	margin-bottom: 16px;
 }
 
+.no-last-border-bottom tr:last-child td {
+	border-bottom: 0 !important;
+}
+
 .text-center {
 	text-align: center;
 }
