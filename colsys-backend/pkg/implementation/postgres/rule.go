@@ -87,6 +87,12 @@ func CreateRule(Rule *domain.Rule) *domain.Rule {
 		log.Print(err)
 	}
 
+	for i := range Rule.RuleDetails {
+		Rule.RuleDetails[i].RuleID = rl.ID
+		rd := CreateRuleDetail(Rule.RuleDetails[i])
+		rl.RuleDetails = append (rl.RuleDetails, rd)
+	}
+
 	return &rl
 }
 
@@ -116,6 +122,8 @@ func DeleteRule(ID int) *domain.Rule {
 	if err != nil {
 		log.Print(err)
 	}
+
+	DeleteRuleDetailsByRule(ID)
 
 	return &rl
 }

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Button, Card, message, Popconfirm, Table } from 'antd';
 const { Column } = Table;
 
+import { createFragmentContainer, graphql } from 'react-relay';
+
 import RuleModal from '../RuleModal';
 
 class RuleCard extends Component { 
@@ -44,23 +46,6 @@ class RuleCard extends Component {
 
 
 	render() {
-
-	let dataSource;
-
-	dataSource = [{
-		key: '1',
-		name: 'Rule 1',
-	}, {
-		key: '2',
-		name: 'Rule 2',
-	}, {
-		key: '3',
-		name: 'Rule 3',
-	}, {
-		key: '4',
-		name: 'Rule 4',
-	}];
-
 		return (
 			<Card bordered={false}
 				title='Rule List'
@@ -69,7 +54,7 @@ class RuleCard extends Component {
 				}
 				bodyStyle={{ padding: '0 16px' }}
 			>
-				<Table size='middle' dataSource={dataSource} showHeader={false} pagination={false}>
+				<Table loading={this.props.loading} className='no-last-border-bottom' rowKey='id' size='middle' dataSource={this.props.rules} showHeader={false} pagination={false}>
 					<Column
 						title='Name' 
 						dataIndex='name'
@@ -101,4 +86,14 @@ class RuleCard extends Component {
 	};
 }
 
-export default RuleCard;
+export default createFragmentContainer(
+	RuleCard,
+	graphql`
+		fragment RuleCard_rules on Rule @relay(plural: true) {
+			id,
+			name,
+			index,
+			status,
+		}
+	`,
+);

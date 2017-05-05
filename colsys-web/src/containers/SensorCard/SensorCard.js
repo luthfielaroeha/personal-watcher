@@ -1,45 +1,26 @@
 import React, { Component } from 'react';
 import { Card, Table, Tag } from 'antd';
 
-const { Column } = Table;
+import { createFragmentContainer, graphql } from 'react-relay';
 
-const status = {
-	1: {
-		color: 'green',
-		text: 'ON'
-	},
-	2: {
-		color: 'red',
-		text: 'OFF'
-	}
-}
+const { Column } = Table;
 
 class SensorCard extends Component { 
 	render() {
-		const dataSource = [{
-			key: '1',
-			name: 'Sensor 1',
-			status: 1
-		}, {
-			key: '2',
-			name: 'Sensor 2',
-			status: 1
-		}, {
-			key: '3',
-			name: 'Sensor 3',
-			status: 1
-		}, {
-			key: '4',
-			name: 'Sensor 4',
-			status: 2
-		}];
+		function renderStatus(status) {
+			if (status === false) {
+				return <Tag className='background color-red'>OFF</Tag>;
+			} else {
+				return <Tag className='background color-green'>ON</Tag>;
+			}
+		}
 
 		return (
 			<Card bordered={false}
 				title='Sensor List'
 				bodyStyle={{ padding: '0 10px' }}
 			>
-				<Table size='middle' dataSource={dataSource} showHeader={false} pagination={false}>
+				<Table loading={this.props.loading} className='no-last-border-bottom' rowKey="id" size='middle' dataSource={this.props.sensors} showHeader={false} pagination={false}>
 					<Column
 						title='Name' 
 						dataIndex='name'
@@ -50,7 +31,7 @@ class SensorCard extends Component {
 						dataIndex='status'
 						key='status'
 						className='text-right'
-						render={(text, record) => (<Tag className={'background color-' + status[text].color}>{status[text].text}</Tag>)}
+						render={(text, record) => (renderStatus(text))}
 					/>
 				</Table>
 			</Card>
@@ -58,4 +39,15 @@ class SensorCard extends Component {
 	};
 }
 
-export default SensorCard;
+export default createFragmentContainer(
+	SensorCard,
+	graphql`
+		fragment SensorCard_sensors on Sensor @relay(plural: true) {
+			id,
+			name,
+			connection,
+			status,
+			type
+		}
+	`,
+);

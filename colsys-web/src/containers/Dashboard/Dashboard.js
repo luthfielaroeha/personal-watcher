@@ -7,6 +7,13 @@ import SensorCard from '../SensorCard';
 import RuleCard from '../RuleCard';
 import SensorChart from '../SensorChart';
 
+import {
+	QueryRenderer, 
+	graphql,
+} from 'react-relay';
+
+import environment from '../../libraries/RelayEnvironment';
+
 const mqttConfig = {
 	url: 'ws://localhost:9001',
 	opt: {
@@ -23,6 +30,7 @@ personalMQTT.connect(actionTopicMapping);
 
 class Dashboard extends Component { 
 	render() {
+		let rulesProps, sensorsProps;
 		const data = [
 			{name: '00:00', Sensor1: 40, Sensor2: 24, amt: 2400},
 			{name: '02:00', Sensor1: 30, Sensor2: 13, amt: 2210},
@@ -41,15 +49,55 @@ class Dashboard extends Component {
 
 		return (
 			<div>
-				<Row gutter={16}>
+				<Row>
 					<Col md={24}>
-						<SensorChart data={data}/>
+						<SensorChart data={data} />
 					</Col>
-					<Col md={14}>
-						<RuleCard />
-					</Col>
-					<Col md={10}>
-						<SensorCard />
+					<Col md={24}>
+						<QueryRenderer
+							environment={environment}
+							query={graphql`
+								query DashboardQuery {
+									sensors {
+										...SensorCard_sensors
+									}
+								}
+							`}
+
+							render={({error, props}) => {
+								if (error) {
+									return <div>{error.message}</div>;
+								} else {
+									if (props) {
+										rulesProps = {
+											rules: props.rules,
+											loading: false
+										}
+										sensorsProps = {
+											sensors: props.sensors,
+											loading: false
+										}
+									} else {
+										rulesProps = {
+											loading: true
+										}
+										sensorsProps = {
+											loading: true
+										}
+									}
+									return (
+									<Row gutter={8}>
+										<Col md={14}>
+											<RuleCard {...rulesProps} />
+										</Col>
+										<Col md={10}>
+											<SensorCard {...sensorsProps} />
+										</Col>
+									</Row>
+									) ;
+								}
+							}}
+						/>
 					</Col>
 				</Row>
 			</div>

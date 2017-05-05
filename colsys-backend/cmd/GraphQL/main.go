@@ -7,6 +7,7 @@ import (
 	"github.com/neelance/graphql-go"
 	colsys "colsys-backend/pkg/graphql"
 	"github.com/neelance/graphql-go/relay"
+	"github.com/rs/cors"
 )
 
 var schema *graphql.Schema
@@ -19,12 +20,13 @@ func init() {
 	}
 }
 
+
 func main() {
 	http.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Write(page)
 	}))
 
-	http.Handle("/graphql", &relay.Handler{Schema: schema})
+	http.Handle("/graphql", cors.Default().Handler(&relay.Handler{Schema: schema}))
 	http.Handle("/jsonSchema", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		jsonSchema, _ := schema.ToJSON()
 		w.Write(jsonSchema)

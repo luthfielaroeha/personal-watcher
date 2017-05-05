@@ -9,6 +9,10 @@
 	margin-bottom: 16px;
 }
 
+.no-last-border-bottom tr:last-child td {
+	border-bottom: 0 !important;
+}
+
 .text-center {
 	text-align: center;
 }
@@ -52,7 +56,6 @@
 .background.color-pink {
 	background-color: rgb(255, 45, 85);
 }
-
 
 .text-red {
 	color: rgb(255, 59, 48);

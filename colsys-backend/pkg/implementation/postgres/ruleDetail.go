@@ -68,6 +68,7 @@ func ruleDetails(query *sq.SelectBuilder) []*domain.RuleDetail {
 func RuleDetails() []*domain.RuleDetail {
 	return ruleDetails(ruleDetailQuery())
 }
+
 func RuleDetailsByRule(ruleID int) []*domain.RuleDetail {
 	queryByRule := ruleDetailQuery().Where("ruleID=?", ruleID)
 	return ruleDetails(&queryByRule)
@@ -87,7 +88,7 @@ func RuleDetail(ID int) *domain.RuleDetail {
 
 func CreateRuleDetail(RuleDetail *domain.RuleDetail) *domain.RuleDetail {
 	var rl domain.RuleDetail
-	query, params, _ := psql.Insert("rule").
+	query, params, _ := psql.Insert("ruleDetail").
 						SetMap(buildRuleDetailMap(RuleDetail)).
 						Suffix(ruleDetailReturnField()).ToSql()
 	err := scanRuleDetail(conn.QueryRow(query, params...), &rl)
@@ -126,4 +127,20 @@ func DeleteRuleDetail(ID int) *domain.RuleDetail {
 	}
 
 	return &rl
+}
+
+func DeleteRuleDetailsByRule(ruleID int) {
+	query, params, _ := updateRuleDetail().
+						SetMap(sq.Eq{"isDeleted":true}).
+						Where("ruleID=?", ruleID).
+						Suffix(ruleDetailReturnField()).ToSql()
+	commandTag, err := conn.Exec(query, params...)
+
+	if err != nil {
+		log.Print(err)
+	}
+
+	if commandTag.RowsAffected() == 0 {
+		log.Print("No rule details is deleted")
+	}
 }

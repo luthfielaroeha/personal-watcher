@@ -21,6 +21,7 @@ type ruleInput struct {
 	Name *string
 	Index *int32
 	Status *bool
+	RuleDetails []*ruleDetailInput
 }
 
 func ruleInputToDomain(ruleInput *ruleInput) *domain.Rule {
@@ -28,6 +29,7 @@ func ruleInputToDomain(ruleInput *ruleInput) *domain.Rule {
 				Name: *ruleInput.Name,
 				Index: int(*ruleInput.Index),
 				Status: *ruleInput.Status,
+				RuleDetails: mapRuleDetailsToDomain(ruleInput.RuleDetails),
 			}
 	return &rule
 }
@@ -82,4 +84,13 @@ func (s *ruleResolver) Index() int32 {
 
 func (s *ruleResolver) Status() *bool {
 	return &s.s.Status
+}
+
+func (s *ruleResolver) RuleDetails() *[]*ruleDetailResolver {
+	var ruleDetails []*ruleDetailResolver
+	for i := range s.s.RuleDetails {
+		ruleDetails = append(ruleDetails, &ruleDetailResolver{s.s.RuleDetails[i]})
+	}
+
+	return &ruleDetails
 }

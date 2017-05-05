@@ -73,6 +73,10 @@ func (s *sensorResolver) ID() graphql.ID {
 	return relay.MarshalID(sensorKind, s.s.ID)
 }
 
+func (s *sensorResolver) TrueID() int32 {
+	return int32(s.s.ID)
+}
+
 func (s *sensorResolver) Connection() string {
 	return s.s.Connection
 }

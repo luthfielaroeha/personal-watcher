@@ -45,10 +45,11 @@ var Schema = `
 		callbackFn: String
 	}
 
-
 	type Sensor {
 		# The ID of the sensor
 		id: ID!
+		# The ID of the sensor
+		trueid: Int!
 		# How to connect to this sensor
 		connection: String!
 		# What this sensor called
@@ -80,12 +81,27 @@ var Schema = `
 		name: String!
 		index: Int!
 		status: Boolean
+		ruleDetails: [RuleDetail]
+	}
+
+	type RuleDetail {
+		id: ID!
+		sensor: Int!
+		operator: String!
+		numberValue: Int!
 	}
 
 	input RuleInput {
 		name: String
 		index: Int
 		status: Boolean
+		ruleDetails: [RuleDetailInput]!
+	}
+
+	input RuleDetailInput {
+		sensor: Int
+		operator: String
+		numberValue: Int
 	}
 `
 

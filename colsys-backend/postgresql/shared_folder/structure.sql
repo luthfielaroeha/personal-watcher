@@ -26,6 +26,7 @@ CREATE TABLE sensor (
 CREATE TABLE rule (
 	id SERIAL PRIMARY KEY,
 	actionID INT,
+	rule VARCHAR(255),
 	name VARCHAR(50),
 	index INT,
 	status BOOL, 
