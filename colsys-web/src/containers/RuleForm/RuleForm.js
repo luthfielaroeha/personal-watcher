@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Button, Form, Icon, Input, Select } from 'antd';
 
+import { createFragmentContainer, graphql } from 'react-relay';
+
 import InputRule from '../InputRule';
 import './RuleForm.css'
 
@@ -52,6 +54,7 @@ class RuleForm extends Component {
 
 		getFieldDecorator('keys', { initialValue: [uniqKey] })
 		const keys = getFieldValue('keys')
+		
 		const inputRules = keys.map((key, index) => {
 			return (
 				<Form.Item
@@ -66,7 +69,7 @@ class RuleForm extends Component {
 							required: true,
 							message: 'Please input rule or delete this field'
 						}]
-					}) (<InputRule />) }
+					}) (<InputRule sensor={this.props.sensors} />) }
 					<Icon
 						className="dynamic-delete-button"
 						type="minus-circle-o"
@@ -76,6 +79,10 @@ class RuleForm extends Component {
 				</Form.Item>
 			)
 		})
+		const actions = this.props.actions
+		const actionOpts = actions.map((action) => 
+			<Select.Option key={action.id} value={action.id}>{action.name}</Select.Option>
+		);
 
 		return (
 			<Form layout="horizontal">
@@ -103,9 +110,7 @@ class RuleForm extends Component {
 						}]
 					}) (
 						<Select placeholder='Please select an action'>
-							<Select.Option value='email01'>Send Email</Select.Option>
-							<Select.Option value='AC_OFF_01'>Turn off AC</Select.Option>
-							<Select.Option value='AC_ON_01'>Turn on AC</Select.Option>
+							{actionOpts}
 						</Select>
 					) }
 				</Form.Item>
@@ -116,4 +121,17 @@ class RuleForm extends Component {
 
 RuleForm = Form.create({})(RuleForm);
 
-export default RuleForm;
+export default createFragmentContainer(
+	RuleForm,
+	graphql`
+		fragment RuleForm_actions on Action @relay(plural: true) {
+			id,
+			name
+		}
+		fragment RuleForm_sensors on Sensor @relay(plural: true) {
+			id,
+			trueid,
+			name
+		}
+	`,
+);

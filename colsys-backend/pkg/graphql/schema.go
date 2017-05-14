@@ -30,7 +30,7 @@ var Schema = `
 		deleteSensor(id: ID!): Sensor
 		createRule(rule: RuleInput): Rule
 		updateRule(id: ID!, rule: RuleInput): Rule
-		deleteRule(id: ID!): Rule
+		deleteRule(input: RuleDeleteInput): Rule
 	}
 
 	# List of action 
@@ -50,6 +50,7 @@ var Schema = `
 		# The ID of the sensor
 		id: ID!
 		# How to connect to this sensor
+		trueid: String!
 		connection: String!
 		# What this sensor called
 		name: String!
@@ -88,6 +89,10 @@ var Schema = `
 		index: Int
 		status: Boolean
 		rule: String
+	}
+
+	input RuleDeleteInput {
+		id: ID!
 	}
 `
 

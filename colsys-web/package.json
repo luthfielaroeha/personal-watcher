@@ -3,13 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
-    "babel-plugin-relay": "dev",
-    "relay-compiler": "dev",
     "autoprefixer": "6.7.2",
     "babel-core": "6.22.1",
     "babel-eslint": "7.1.1",
     "babel-jest": "18.0.0",
     "babel-loader": "6.2.10",
+    "babel-plugin-relay": "dev",
     "babel-preset-react-app": "^2.2.0",
     "babel-runtime": "^6.20.0",
     "case-sensitive-paths-webpack-plugin": "1.1.4",
@@ -37,6 +36,7 @@
     "postcss-loader": "1.2.2",
     "promise": "7.1.1",
     "react-dev-utils": "^0.5.2",
+    "relay-compiler": "dev",
     "style-loader": "0.13.1",
     "url-loader": "0.5.7",
     "webpack": "1.14.0",
@@ -45,8 +45,8 @@
     "whatwg-fetch": "2.0.2"
   },
   "dependencies": {
-    "antd": "^2.9.3",
-    "mqtt": "^2.6.2",
+    "antd": "^2.10.0",
+    "mqtt": "^2.7.1",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-relay": "dev",
@@ -56,7 +56,7 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
-	"relay": "relay-compiler --src ./src --schema schema.graphql"
+    "relay": "relay-compiler --src ./src --schema schema.graphql"
   },
   "jest": {
     "collectCoverageFrom": [

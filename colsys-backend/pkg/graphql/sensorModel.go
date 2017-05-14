@@ -1,10 +1,13 @@
 package graphql
 
 import (
+	"strconv"
+
 	graphql "github.com/neelance/graphql-go"
 	"github.com/neelance/graphql-go/relay"
 	"colsys-backend/pkg/implementation/postgres"
-	"colsys-backend/pkg/domain")
+	"colsys-backend/pkg/domain"
+)
 
 var sensorKind string
 
@@ -71,6 +74,10 @@ func (r *Resolver) DeleteSensor(args *struct { ID graphql.ID }) *sensorResolver 
 
 func (s *sensorResolver) ID() graphql.ID {
 	return relay.MarshalID(sensorKind, s.s.ID)
+}
+
+func (s *sensorResolver) TrueID() string {
+	return "s" + strconv.Itoa(s.s.ID)
 }
 
 func (s *sensorResolver) Connection() string {

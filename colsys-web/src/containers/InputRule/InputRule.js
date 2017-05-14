@@ -11,7 +11,7 @@ const comparison = {
 	">": "gt"
 }
 
-export default class InputRule extends Component {
+class InputRule extends Component {
 	constructor(props) {
 		super(props);
 		const value = this.props.value || {}
@@ -21,21 +21,6 @@ export default class InputRule extends Component {
 			numberValue: value.numberValue || 0,
 			sensorSource: []
 		}
-	}
-
-	componentDidMount() {
-		this.setState({
-			sensorSource: [{
-				value: 'TEMP_01',
-				text: 'Sensor 1'
-			}, {
-				value: 'TEMP_02',
-				text: 'Sensor 2'
-			}, {
-				value: 'TEMP_03',
-				text: 'Sensor 3'
-			}]
-		})
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -76,12 +61,13 @@ export default class InputRule extends Component {
 	}
 
 	render() {
-		const sensorOptions = this.state.sensorSource.map(sensor =>
+		const sensors = this.props.sensor
+		const sensorOptions = sensors.map(sensor =>
 			<Select.Option 
-				key={sensor.value} 
-				value={sensor.value}
+				key={sensor.id} 
+				value={sensor.trueid}
 			>
-				{sensor.text}
+				{sensor.name}
 			</Select.Option>
 		)
 
@@ -118,3 +104,5 @@ export default class InputRule extends Component {
 		)
 	}
 }
+
+export default InputRule;

@@ -62,7 +62,7 @@ class App extends Component {
 						</div>
 					</Content>
 					<Footer className='text-center'>
-						ColSys &copy; 2016 Created by Muhamad Luthfie La Roeha
+						ColSys &copy; 2017 Created by Muhamad Luthfie La Roeha
 					</Footer>
 				</Layout>
 			</Layout>

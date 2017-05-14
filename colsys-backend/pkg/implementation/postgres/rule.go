@@ -107,7 +107,7 @@ func UpdateRule(ID int, Rule *domain.Rule) *domain.Rule {
 func DeleteRule(ID int) *domain.Rule {
 	var rl domain.Rule
 	query, params, _ := updateRule().
-						SetMap(sq.Eq{"isDeleted":true}).
+						SetMap(sq.Eq{"isDeleted":false}).
 						Where("id=?", ID).
 						Suffix(ruleReturnField()).ToSql()
 

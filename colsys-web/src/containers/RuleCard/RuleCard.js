@@ -5,12 +5,13 @@ const { Column } = Table;
 import { createFragmentContainer, graphql } from 'react-relay';
 
 import RuleModal from '../RuleModal';
+import removeRuleMutation from '../../mutations/removeRuleMutation';
 
 class RuleCard extends Component { 
 	constructor() {
 		super();
 		this.state = {
-			visible: false,
+			modalVisibility: false,
 			title: ''
 		}
 	}
@@ -18,20 +19,20 @@ class RuleCard extends Component {
 	handleOk() {
 		message.success('Rule successfully saved');
 		this.setState({
-			visible: false
+			modalVisibility: false
 		});
 	}
 
 	handleCancel() {
 		message.error('Cancel Adding Rule');
 		this.setState({
-			visible: false
+			modalVisibility: false
 		});
 	}
 
 	handleAddNew() {
 		this.setState({
-			visible: true,
+			modalVisibility: true,
 			title: 'Add New Rule'
 		});
 	}
@@ -39,11 +40,20 @@ class RuleCard extends Component {
 
 	handleEdit() {
 		this.setState({
-			visible: true,
+			modalVisibility: true,
 			title: 'Edit Rule'
 		});
 	}
 
+	handleDelete(rule) {
+		removeRuleMutation.commit(
+			this.props.relay.environment,
+			rule.id,
+			() => {
+				message.success("Rule " + rule.name + " deleted")
+			}
+		);
+	}
 
 	render() {
 		return (
@@ -63,13 +73,14 @@ class RuleCard extends Component {
 					<Column
 						title='Action' 
 						key='action'
+						dataIndex='id'
 						className='text-right'
 						render={(text, record) => (
 							<span>
 								<a href='#' onClick={() => this.handleEdit()}>Edit</a>
 								<span className='ant-divider' />
 								<Popconfirm title='Delete this rule ?' 
-									onConfirm={() => message.success('Deleted.')}
+									onConfirm={() => this.handleDelete(record)}
 									onCancel={() => message.error('Canceled.')}
 									okText='Yes'
 									cancelText='No'
@@ -80,8 +91,8 @@ class RuleCard extends Component {
 						)}
 					/>
 				</Table>
-				<RuleModal onOk={() => this.handleOk()} onCancel={() => this.handleCancel()} visible={this.state.visible} title={this.state.title} />
-			</Card>
+				<RuleModal onOk={() => this.handleOk()} onCancel={() => this.handleCancel()} visible={this.state.modalVisibility} title={this.state.title} />
+		</Card>
 		);
 	};
 }

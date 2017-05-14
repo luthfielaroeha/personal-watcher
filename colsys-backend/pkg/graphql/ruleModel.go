@@ -24,6 +24,10 @@ type ruleInput struct {
 	Rule *string
 }
 
+type ruleDeleteInput struct {
+	ID graphql.ID
+}
+
 func ruleInputToDomain(ruleInput *ruleInput) *domain.Rule {
 	rule := domain.Rule{
 				Name: *ruleInput.Name,
@@ -65,8 +69,8 @@ func (r *Resolver) UpdateRule(args *struct {
 	return &ruleResolver{s}
 }
 
-func (r *Resolver) DeleteRule(args *struct { ID graphql.ID }) *ruleResolver {
-	s := postgres.DeleteRule(unmarshalID(args.ID))
+func (r *Resolver) DeleteRule(args *struct { Input *ruleDeleteInput }) *ruleResolver {
+	s := postgres.DeleteRule(unmarshalID(args.Input.ID))
 	return &ruleResolver{s}
 }
 
