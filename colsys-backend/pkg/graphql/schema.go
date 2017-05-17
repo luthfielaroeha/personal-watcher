@@ -29,13 +29,14 @@ var Schema = `
 		updateSensor(id: ID!, sensor: SensorInput): Sensor
 		deleteSensor(id: ID!): Sensor
 		createRule(rule: RuleInput): Rule
-		updateRule(id: ID!, rule: RuleInput): Rule
+		updateRule(input: RuleUpdateInput): Rule
 		deleteRule(input: RuleDeleteInput): Rule
 	}
 
 	# List of action 
 	type Action {
 		id: ID!
+		trueid: Int!
 		name: String
 		callbackFn: String!
 	}
@@ -82,6 +83,7 @@ var Schema = `
 		index: Int!
 		status: Boolean
 		rule: String!
+		actionID: Int!
 	}
 
 	input RuleInput {
@@ -89,6 +91,12 @@ var Schema = `
 		index: Int
 		status: Boolean
 		rule: String
+		actionID: Int
+	}
+
+	input RuleUpdateInput {
+		id: ID!
+		rule: RuleInput
 	}
 
 	input RuleDeleteInput {

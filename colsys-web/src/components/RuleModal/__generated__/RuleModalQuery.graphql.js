@@ -3,8 +3,8 @@
  *   relay-compiler
  *
  * @providesModule RuleModalQuery.graphql
- * @generated SignedSource<<200241e2508f7e29c37618919148649f>>
- * @relayHash 928c30d7c6266441183913ccecdb7c49
+ * @generated SignedSource<<57efe5944cfa6c87de3322a9db1cda5e>>
+ * @relayHash b1c85d6cc0ef0b2ed525aa237d99c110
  * @flow
  * @nogrep
  */
@@ -38,6 +38,7 @@ fragment RuleForm_sensors on Sensor {
 
 fragment RuleForm_actions on Action {
   id
+  trueid
   name
 }
 */
@@ -155,6 +156,13 @@ const batch /*: ConcreteBatch*/ = {
                 "kind": "ScalarField",
                 "alias": null,
                 "args": null,
+                "name": "trueid",
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
                 "name": "name",
                 "storageKey": null
               }
@@ -165,7 +173,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query RuleModalQuery {\n  sensors {\n    ...RuleForm_sensors\n    id\n  }\n  actions {\n    ...RuleForm_actions\n    id\n  }\n}\n\nfragment RuleForm_sensors on Sensor {\n  id\n  trueid\n  name\n}\n\nfragment RuleForm_actions on Action {\n  id\n  name\n}\n"
+  "text": "query RuleModalQuery {\n  sensors {\n    ...RuleForm_sensors\n    id\n  }\n  actions {\n    ...RuleForm_actions\n    id\n  }\n}\n\nfragment RuleForm_sensors on Sensor {\n  id\n  trueid\n  name\n}\n\nfragment RuleForm_actions on Action {\n  id\n  trueid\n  name\n}\n"
 };
 
 module.exports = batch;

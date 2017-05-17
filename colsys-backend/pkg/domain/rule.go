@@ -7,5 +7,6 @@ type (
 		Index  int
 		Status bool
 		Rule string
+		Action Action
 	}
 )

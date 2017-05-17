@@ -1,14 +1,19 @@
 .ruleinput.sensor {
-	width: 46%;
+	width: 32%;
 	margin-right: 3%;
 }
 
 .ruleinput.operator {
-	width: 17%;
+	width: 13%;
 	margin-right: 3%;
 }
 
 .ruleinput.value {
-	width: 18%;
+	width: 16%;
+	margin-right:3%;
+}
+
+.ruleinput.logical {
+	width: 20%;
 	margin-right:3%;
 }

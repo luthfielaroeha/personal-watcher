@@ -6,23 +6,25 @@ import {
 import CustomMutationLibrary from './CustomMutationLibrary';
 
 const mutation = graphql`
-mutation removeRuleMutation($input: RuleDeleteInput) {
-	deleteRule(input: $input) {
+mutation addRuleMutation($input: RuleInput) {
+	createRule(rule: $input) {
 		id,
 		name,
 		index,
-		status
+		status,
+		rule,
+		actionID
 	}
 }
 `;
 
-function sharedUpdater(store, deletedID) {
-	CustomMutationLibrary.deleteByID(store, 'rules', deletedID)
+function sharedUpdater(store, newRule) {
+	CustomMutationLibrary.insertData(store, 'rules', newRule)
 }
 
 function commit(
 		environment,
-		ruleID,
+		rule,
 		callbackFn
 		) {
 	return commitMutation(
@@ -31,18 +33,17 @@ function commit(
 			mutation,
 			variables: {
 				input: {
-					id: ruleID
+					...rule
 				}
 			},
 			updater: (store) => {
-				const payload = store.getRootField('deleteRule');
-				sharedUpdater(store, payload.getValue('id'));
+				const payload = store.getRootField('createRule');
+				sharedUpdater(store, payload);
 				if (typeof callbackFn === 'function') {
 					callbackFn()
 				}
 			},
 			optimisticUpdater: (store) => {
-				sharedUpdater(store, ruleID);
 			},
 		}
 	);

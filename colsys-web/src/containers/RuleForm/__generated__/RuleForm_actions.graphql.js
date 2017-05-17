@@ -3,7 +3,7 @@
  *   relay-compiler
  *
  * @providesModule RuleForm_actions.graphql
- * @generated SignedSource<<dc5bb2005d13091950524ca458e540f0>>
+ * @generated SignedSource<<8b963ad44a2aa1e6d5bf3dad24ba6463>>
  * @flow
  * @nogrep
  */
@@ -14,6 +14,7 @@
 import type {ConcreteFragment} from 'relay-runtime';
 export type RuleForm_actions = {
   id: string;
+  trueid: number;
   name?: ?string;
 };
 */
@@ -33,6 +34,13 @@ const fragment /*: ConcreteFragment*/ = {
       "alias": null,
       "args": null,
       "name": "id",
+      "storageKey": null
+    },
+    {
+      "kind": "ScalarField",
+      "alias": null,
+      "args": null,
+      "name": "trueid",
       "storageKey": null
     },
     {

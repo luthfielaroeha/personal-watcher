@@ -3,8 +3,8 @@
  *   relay-compiler
  *
  * @providesModule DashboardQuery.graphql
- * @generated SignedSource<<96de3eba367f124647879085d7779dd2>>
- * @relayHash 953e7a2ddc649d07e9fde2df9534dd21
+ * @generated SignedSource<<214fabf93fd7a7ef216ad91bf8dbae38>>
+ * @relayHash 332a1ed85f9d150a329e5e6ae971f596
  * @flow
  * @nogrep
  */
@@ -43,6 +43,8 @@ fragment RuleCard_rules on Rule {
   name
   index
   status
+  rule
+  actionID
 }
 */
 
@@ -189,6 +191,20 @@ const batch /*: ConcreteBatch*/ = {
                 "args": null,
                 "name": "status",
                 "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "rule",
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "actionID",
+                "storageKey": null
               }
             ]
           }
@@ -197,7 +213,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query DashboardQuery {\n  sensors {\n    ...SensorCard_sensors\n    id\n  }\n  rules {\n    ...RuleCard_rules\n    id\n  }\n}\n\nfragment SensorCard_sensors on Sensor {\n  id\n  name\n  connection\n  status\n  type\n}\n\nfragment RuleCard_rules on Rule {\n  id\n  name\n  index\n  status\n}\n"
+  "text": "query DashboardQuery {\n  sensors {\n    ...SensorCard_sensors\n    id\n  }\n  rules {\n    ...RuleCard_rules\n    id\n  }\n}\n\nfragment SensorCard_sensors on Sensor {\n  id\n  name\n  connection\n  status\n  type\n}\n\nfragment RuleCard_rules on Rule {\n  id\n  name\n  index\n  status\n  rule\n  actionID\n}\n"
 };
 
 module.exports = batch;

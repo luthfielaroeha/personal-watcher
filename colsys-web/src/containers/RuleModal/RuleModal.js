@@ -1,52 +1,79 @@
-import React, { Component } from 'react';
-import { Modal } from 'antd';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { message } from 'antd';
 
-import {
-	QueryRenderer, 
-	graphql,
-} from 'react-relay';
+import { hideRuleModal } from 'actions';
+import RuleModalComponent from 'components/RuleModal';
 
 import environment from '../../libraries/RelayEnvironment';
+import addRuleMutation from 'mutations/addRuleMutation';
+import changeRuleMutation from 'mutations/changeRuleMutation';
 
-import RuleForm from '../RuleForm';
-
-class RuleModal extends Component {
-	render() {
-		return (
-			<Modal title={this.props.title} 
-				onOk={() => this.props.onOk()} 
-				onCancel={() => this.props.onCancel()} 
-				visible={this.props.visible}
-				okText='Save'
-				cancelText='Cancel'
-			>
-				<QueryRenderer 
-					environment={environment}
-					query={graphql`
-						query RuleModalQuery {
-							sensors {
-								...RuleForm_sensors
-							}
-							actions {
-								...RuleForm_actions
-							}
-						}
-					`}
-
-					render={({error, props}) => {
-						if (error) {
-							return <div>{error.message}</div>
-						} else if (props) {
-							return (
-								<RuleForm sensors={props.sensors} actions={props.actions} item={{name: ''}}/>
-							)
-						}
-						return <div></div>
-					}}
-				/>
-			</Modal>
-		);
+const mapStateToProps = (state, ownProps) => {
+	return {
+		visibility: state.rulemodal.visibility,
+		title: state.rulemodal.title,
+		rule: state.rulemodal.rule,
 	}
 }
 
-export default RuleModal;
+const mapDispatchToProps = (dispatch, ownProps) => {
+	return {
+		hideModal: bindActionCreators(hideRuleModal, dispatch),
+		saveRule: (rule) => {
+			let rules = ""
+
+			const ruleList = rule.ruleList
+
+			for (let i=0;i<ruleList.length;i++) {
+				let sensorRule = rule['rule-'+ruleList[i].key]
+				rules += "[" + sensorRule.sensorID + "] " + sensorRule.operator + " " + sensorRule.numberValue
+				if (i < ruleList.length - 1) {
+					rules += " " + sensorRule.logical + " "
+				}
+			}
+
+			const savedRule = {
+				name: rule.name,
+				index: 99,
+				status: true,
+				rule: rules,
+				actionID: Number(rule.action)
+			}
+
+			if (rule.mode === 'add') {
+				console.log(savedRule.name + " has been added");
+				addRuleMutation.commit(
+					environment,
+					savedRule,
+					() => {
+						message.success("Rule " + rule.name + " successfully saved")
+						dispatch({
+							type: 'HIDE_MODAL'
+						})
+					}
+				);
+			} else {
+				console.log(savedRule.name + " has been edited");
+				changeRuleMutation.commit(
+					environment,
+					rule.ruleID,
+					savedRule,
+					() => {
+						message.success("Rule " + rule.name + " successfully edited")
+						dispatch({
+							type: 'HIDE_MODAL'
+						})
+					}
+				);
+			}
+		}
+	}
+}
+
+const RuleModal = connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(RuleModalComponent);
+
+export default RuleModal

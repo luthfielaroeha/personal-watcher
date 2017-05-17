@@ -4,11 +4,11 @@ import { InputNumber, Select } from 'antd';
 import './InputRule.css'
 
 const comparison = {
-	"=": "eq",
-	"<": "lt",
-	"<=": "lte",
-	">=": "gte",
-	">": "gt"
+	"=": "=",
+	"<": "<",
+	"<=": "<=",
+	">=": ">=",
+	">": ">"
 }
 
 class InputRule extends Component {
@@ -19,7 +19,7 @@ class InputRule extends Component {
 			sensorID: value.sensorID || '',
 			operator: value.operator || '',
 			numberValue: value.numberValue || 0,
-			sensorSource: []
+			logical: value.logical || 'AND',
 		}
 	}
 
@@ -60,6 +60,13 @@ class InputRule extends Component {
 		this.triggerChange({ numberValue })
 	}
 
+	handleLogicalChange = (logical) => {
+		if (!('value' in this.props)) {
+			this.setState({ logical }) 
+		}
+		this.triggerChange({ logical })
+	}
+
 	render() {
 		const sensors = this.props.sensor
 		const sensorOptions = sensors.map(sensor =>
@@ -84,22 +91,34 @@ class InputRule extends Component {
 				</Select>
 				<Select placeholder='operator'
 					showSearch
-					filterOption={ (input, option) => option.props.value.toLowerCase().indexOf(comparison[input].toLowerCase()) >= 0 }
+					filterOption={ (input, option) => option.props.value.indexOf(comparison[input]) >= 0 }
 					value={this.state.operator}
 					onChange={this.handleOperatorChange}
 					className='ruleinput operator'
 				>
-					<Select.Option value="lt">&lt;</Select.Option>
-					<Select.Option value="lte">&le;</Select.Option>
-					<Select.Option value="eq">=</Select.Option>
-					<Select.Option value="gte">&ge;</Select.Option>
-					<Select.Option value="gt">&gt;</Select.Option>
+					<Select.Option value="<">&lt;</Select.Option>
+					<Select.Option value="<=">&le;</Select.Option>
+					<Select.Option value="==">=</Select.Option>
+					<Select.Option value=">=">&ge;</Select.Option>
+					<Select.Option value=">">&gt;</Select.Option>
 				</Select>
 				<InputNumber placeholder='value'
 					value={this.state.numberValue}
 					onChange={this.handleValueChange}
 					className='ruleinput value'
 				/>
+				{this.props.needLogical && 
+					<Select placeholder='AND/OR'
+						showSearch
+						filterOption={ (input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0 }
+						value={this.state.logical}
+						onChange={this.handleLogicalChange}
+						className='ruleinput logical'
+					>
+						<Select.Option value="AND">AND</Select.Option>
+						<Select.Option value="OR">OR</Select.Option>
+					</Select>
+				}
 			</span>
 		)
 	}

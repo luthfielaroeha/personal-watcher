@@ -77,3 +77,7 @@ func (s *actionResolver) Name() *string {
 func (s *actionResolver) CallbackFn() string {
 	return s.s.CallbackFn
 }
+
+func (s *actionResolver) TrueID() int32 {
+	return int32(s.s.ID)
+}

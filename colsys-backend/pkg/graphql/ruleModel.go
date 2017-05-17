@@ -22,6 +22,12 @@ type ruleInput struct {
 	Index *int32
 	Status *bool
 	Rule *string
+	ActionID *int32
+}
+
+type ruleUpdateInput struct {
+	ID graphql.ID
+	Rule *ruleInput
 }
 
 type ruleDeleteInput struct {
@@ -34,6 +40,9 @@ func ruleInputToDomain(ruleInput *ruleInput) *domain.Rule {
 				Index: int(*ruleInput.Index),
 				Status: *ruleInput.Status,
 				Rule: *ruleInput.Rule,
+				Action: domain.Action{
+					ID: int(*ruleInput.ActionID),
+				},
 			}
 	return &rule
 }
@@ -59,12 +68,9 @@ func (r *Resolver) CreateRule(args *struct { Rule *ruleInput }) *ruleResolver {
 	return &ruleResolver{s}
 }
 
-func (r *Resolver) UpdateRule(args *struct {
-	ID graphql.ID
-	Rule *ruleInput
-}) *ruleResolver {
-	ruleData := ruleInputToDomain(args.Rule)
-	s := postgres.UpdateRule(unmarshalID(args.ID), ruleData)
+func (r *Resolver) UpdateRule(args *struct { Input *ruleUpdateInput }) *ruleResolver {
+	ruleData := ruleInputToDomain(args.Input.Rule)
+	s := postgres.UpdateRule(unmarshalID(args.Input.ID), ruleData)
 
 	return &ruleResolver{s}
 }
@@ -92,4 +98,8 @@ func (s *ruleResolver) Status() *bool {
 
 func (s *ruleResolver) Rule() string {
 	return s.s.Rule
+}
+
+func (s *ruleResolver) ActionID() int32 {
+	return int32(s.s.Action.ID)
 }

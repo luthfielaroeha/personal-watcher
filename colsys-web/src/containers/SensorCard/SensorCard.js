@@ -1,44 +1,19 @@
-import React, { Component } from 'react';
-import { Card, Table, Tag } from 'antd';
-
+import { connect } from 'react-redux';
 import { createFragmentContainer, graphql } from 'react-relay';
 
-const { Column } = Table;
+import SensorCardComponent from 'components/SensorCard';
 
-class SensorCard extends Component { 
-
-	_renderStatus(status) {
-		if (status === false) {
-			return <Tag className='background color-red'>OFF</Tag>;
-		} else {
-			return <Tag className='background color-green'>ON</Tag>;
-		}
+const mapStateToProps = (state, ownProps) => {
+	return {
+		sensors: ownProps.sensors,
+		loading: ownProps.loading,
+		title: 'Sensor List',
 	}
-
-	render() {
-		return (
-			<Card bordered={false}
-				title='Sensor List'
-				bodyStyle={{ padding: '0 10px' }}
-			>
-				<Table className='no-last-border-bottom' loading={this.props.loading} size='middle' rowKey='id' dataSource={this.props.sensors} showHeader={false} pagination={false}>
-					<Column
-						title='Name' 
-						dataIndex='name'
-						key='name'
-					/>
-					<Column
-						title='Status' 
-						dataIndex='status'
-						key='status'
-						className='text-right'
-						render={(text, record) => (this._renderStatus(text))}
-					/>
-				</Table>
-			</Card>
-		);
-	};
 }
+
+const SensorCard = connect(
+	mapStateToProps
+)(SensorCardComponent)
 
 export default createFragmentContainer(
 	SensorCard,

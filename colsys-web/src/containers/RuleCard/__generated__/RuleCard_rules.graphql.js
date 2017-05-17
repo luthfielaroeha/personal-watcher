@@ -3,7 +3,7 @@
  *   relay-compiler
  *
  * @providesModule RuleCard_rules.graphql
- * @generated SignedSource<<ac91a462a113f60c94b58181412e181c>>
+ * @generated SignedSource<<3b62eb7165ae6653a4fa788015188ecc>>
  * @flow
  * @nogrep
  */
@@ -17,6 +17,8 @@ export type RuleCard_rules = {
   name: string;
   index: number;
   status?: ?boolean;
+  rule: string;
+  actionID: number;
 };
 */
 
@@ -56,6 +58,20 @@ const fragment /*: ConcreteFragment*/ = {
       "alias": null,
       "args": null,
       "name": "status",
+      "storageKey": null
+    },
+    {
+      "kind": "ScalarField",
+      "alias": null,
+      "args": null,
+      "name": "rule",
+      "storageKey": null
+    },
+    {
+      "kind": "ScalarField",
+      "alias": null,
+      "args": null,
+      "name": "actionID",
       "storageKey": null
     }
   ],
