@@ -98,9 +98,16 @@ type sensorDataResolver struct {
 	sd *domain.SensorData
 }
 
-func (s *sensorResolver) SensorData() *[]*sensorDataResolver {
+func (s *sensorResolver) SensorData(args *struct{ Limit *int32 }) *[]*sensorDataResolver {
 	var datas []*sensorDataResolver
-	sensorsData := postgres.GetSensorData(s.s.ID)
+	var limit int32
+	if args.Limit == nil {
+		limit = 10
+	} else {
+		limit = *args.Limit
+	}
+
+	sensorsData := postgres.GetSensorData(s.s.ID, limit)
 	for i := range sensorsData {
 		datas = append(datas, &sensorDataResolver{sensorsData[i]})
 	}

@@ -6,11 +6,11 @@ import (
 	"strings"
 	"encoding/json"
 
-	// "colsys-backend/pkg/actions"
+	"colsys-backend/pkg/actions"
 	"colsys-backend/pkg/domain"
 	"colsys-backend/pkg/implementation/postgres"
 
-	"github.com/oleksandr/conditions"
+	"github.com/luthfielaroeha/conditions"
 )
 
 var delayTime time.Duration
@@ -25,8 +25,8 @@ func prepareAI() {
 	// prepareAI()
 }
 
-func evaluateRules() {
-	rules := postgres.Rules()
+func evaluateRules(sensorID string) {
+	rules := postgres.RulesBySensor(sensorID)
 	for i := range rules {
 		go actionInvoker(rules[i])
 	}
@@ -38,6 +38,7 @@ func actionInvoker(rule *domain.Rule) {
 	expr, err := p.Parse()
 	if err != nil {
 		// ...
+		fmt.Println(err)
 	}
 
 	mx.RLock()
@@ -46,6 +47,7 @@ func actionInvoker(rule *domain.Rule) {
 	mx.RUnlock()
 	if err != nil {
 		// ...
+		fmt.Println(err)
 	}
 
 	fmt.Printf("%s:%t\n", rule.Name, r)
@@ -53,10 +55,19 @@ func actionInvoker(rule *domain.Rule) {
 		// TODO: get userdata to run function for specific user, pass it to params
 		jsonRes, _ := json.Marshal(savedData)
 		invokedRule := domain.InvokedRule{
-			RuleName: rule.Name,
+			Rule: *rule,
 			Data: string(jsonRes),
 		}
-		// go actions.Invoke(&rule.Action, &invokedRule)
+		go actions.Invoke(&rule.Action, &invokedRule)
 		go postgres.CreateInvokedRule(&invokedRule)
 	}
+}
+
+func dataTrimmer(data map[string]interface{}, rule *domain.Rule) map[string]interface{} {
+	newData := make(map[string]interface{})
+	sensors := rule.GetSensors()
+	for i := range sensors {
+		newData[sensorName[sensors[i]]] = data[sensors[i]]
+	}
+	return newData
 }

@@ -1,6 +1,7 @@
 package postgres
 
 import (
+	"fmt"
 	"log"
 	"time"
 
@@ -43,8 +44,8 @@ func ruleReturnField() string {
 	return "RETURNING id, rule, name, index, status, actionID"
 }
 
-func Rules() []*domain.Rule {
-	query, params, err := ruleQuery().ToSql()
+func rules(rawQuery *sq.SelectBuilder) []*domain.Rule {
+	query, params, err := rawQuery.ToSql()
 	rows, err := conn.Query(query, params...)
 	if err != nil {
 		log.Print(err)
@@ -64,6 +65,15 @@ func Rules() []*domain.Rule {
 	}
 
 	return rules
+}
+
+func Rules() []*domain.Rule {
+	return rules(ruleQuery())
+}
+
+func RulesBySensor(sensorID string) []*domain.Rule{
+	queryByRule := ruleQuery().Where("rule LIKE ?", fmt.Sprint("%[s", sensorID, "]%"))
+	return rules(&queryByRule)
 }
 
 func Rule(ID int) *domain.Rule {

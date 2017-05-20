@@ -4,7 +4,7 @@ const { Column } = Table;
 
 import RuleModal from 'containers/RuleModal';
 
-const RuleCard = ({rules, rule, loading, addRule, editRule, deleteRule}) => (
+const RuleCard = ({rules, rule, loading, addRule, editRule, deleteRule, showInvoked }) => (
 	<Card bordered={false}
 		title='Rule List'
 		extra={
@@ -24,6 +24,11 @@ const RuleCard = ({rules, rule, loading, addRule, editRule, deleteRule}) => (
 				title='Name' 
 				dataIndex='name'
 				key='name'
+				render={(ruleName, rule) => (
+					<span>
+						<a href="#" onClick={() => showInvoked(rule)}>{ruleName}</a>
+					</span>
+				)}
 			/>
 			<Column
 				title='Action' 

@@ -1,120 +1,57 @@
 import { connect } from 'mqtt';
-
-function invert(obj) {
-	const keys = Object.keys(obj);
-	const newObj = {};
-
-	keys.forEach(key => {
-		newObj[obj[key]] = key;
-	});
-
-	return newObj;
-}
+import { notification } from 'antd';
 
 class PersonalMQTT {
 	constructor(config) {
 		this.config = config;
 		this.mqtt = connect(config.url, config.opt);
 		this.topicActionMap = {};
+		this.mqtt.subscribe("notification/#", { qos: 0});
 	}
 
-	connect(action, store) {
+	connect(store) {
 		this.mqtt.on('connect', () => {
 			console.log("Connected");
-			// store.dispatch({
-			// 	type: 'MQTT_CONNECT',
-			// 	message: 'Connected to MQTT broker',
-			// });
-
-			this.mqtt.subscribe(action, { qos: 0 });
 		});
 
 		this.mqtt.on('disconnect', () => {
 			console.log("Disconnected");
-			// store.dispatch({
-			// 	type: 'MQTT_DISCONNECT',
-			// 	message: 'Disconnected from MQTT broker',
-			// });
 		});
 
 		this.mqtt.on('message', (topic, payload) => {
-			store.dispatch({
-				type: 'ADD_SENSOR_DATA',
-				payload: payload.toString(),
-			});
+			payload = JSON.parse(payload.toString())
+			if (topic.indexOf('sensor') > 0) {
+				store.dispatch({
+					type: 'ADD_SENSOR_DATA',
+					sensorData: payload,
+				});
+			} else {
+				notification.info({
+					message: payload.rule + ' True',
+					description: payload.data
+				});
+			}
 		});
 
 		this.mqtt.on('error', err => {
-			// store.dispatch({
-			// 	type: 'MQTT_ERROR',
-			// 	error: err,
-			// });
+			console.log("Error");
 		});
 	}
 
-	subscribe(actionMap) {
-		const actionNames = Object.keys(actionMap);
-		actionNames.forEach(action => {
-			this.mqtt.subscribe(actionMap[action], { qos: 0});
-			this.topicActionMap[actionMap[action]] = action;
-		});
+	subscribe(sensorID) {
+		const topicName = "building/sensor/" + sensorID
+		console.log("Connected to " + topicName)
+		this.mqtt.subscribe(topicName, { qos: 0});
 	}
 
-	unsubscribe(actions) {
-		const actionMap = invert(this.topicActionMap);
-
-		if (Array.isArray(actions)) {
-			let topic;
-
-			actions.forEach(action => {
-				topic = actionMap[action];
-				this.mqtt.unsubscribe(topic);
-
-				delete this.topicActionMap[topic];
-			});
-		} else {
-			this.mqtt.unsubscribe(actionMap[actions]);
-
-			delete this.topicActionMap[actionMap[actions]];
-		}
+	unsubscribe(sensorID) {
+		const topicName = "building/sensor/" + sensorID
+		console.log("Unsubscribe " + topicName)
+		this.mqtt.unsubscribe(topicName);
 	}
-
-// 	createMiddleware() {
-// 		const mqttClient = this.mqtt;
-
-// 		return store => next => action => {
-// 			if (action.mqtt) {
-// 				const mqtt = action.mqtt;
-// 				let payload;
-
-// 				if (mqtt.topic && typeof mqtt.payload !== 'function') {
-// 					payload = typeof mqtt.payload === 'string'
-// 						? mqtt.payload
-// 						: JSON.stringify(mqtt.payload);
-
-
-// 				} else if (mqtt.topic && typeof mqtt.payload === 'function') {
-// 					payload = mqtt.payload.call(null, store.getState());
-// 				}
-
-// 				mqttClient.publish(mqtt.topic, payload, { qos: 0 });
-
-// 				const modifiedAction = {
-// 					...action,
-// 					mqtt: {
-// 						payload,
-// 						topic: mqtt.topic,
-// 					},
-// 				};
-
-// 				return next(modifiedAction);
-// 			}
-
-// 			return next(action);
-// 		};
-// 	}
 }
 
 export function createClient(config) {
+	console.log("Called now")
 	return new PersonalMQTT(config);
 }

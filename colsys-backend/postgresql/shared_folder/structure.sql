@@ -55,7 +55,7 @@ CREATE TABLE user_account (
 
 CREATE TABLE invokedRule (
 	id SERIAL PRIMARY KEY,
-	ruleName VARCHAR(50),
+	ruleID INT,
 	data TEXT,
 	updatedAt TIMESTAMPTZ DEFAULT now(),
 	isDeleted BOOL DEFAULT false

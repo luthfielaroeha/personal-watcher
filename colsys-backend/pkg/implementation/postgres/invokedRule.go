@@ -11,36 +11,41 @@ import (
 )
 
 func invokedRuleQuery() *sq.SelectBuilder {
-	query := psql.Select("id, ruleName, data").From("invokedRule").Where("isDeleted=?", false).OrderBy("updatedAt DESC")
-	return &query }
+	query := psql.Select("invokedRule.id, name, rule, data, invokedRule.updatedAt").
+		From("invokedRule").
+		LeftJoin("rule ON (rule.id = invokedRule.ruleID)").
+		Where("invokedRule.isDeleted=?", false).
+		OrderBy("invokedRule.updatedAt DESC")
+	return &query
+}
 
 func updateInvokedRule() *sq.UpdateBuilder {
 	query := psql.Update("invokedRule").
-			Set("updatedAt", time.Now())
+			Set("invokedRule.updatedAt", time.Now())
 
 	return &query
 }
 
 func scanInvokedRule(row *pgx.Row, s *domain.InvokedRule) error {
-	err := row.Scan(&s.ID, &s.RuleName, &s.Data)
+	err := row.Scan(&s.ID, &s.Rule.Name, &s.Rule.Rule, &s.Data, &s.Time)
 	return err
 }
 
 func invokedRuleReturnField() string {
-	return "RETURNING id, ruleName, data"
+	return "invokedRule.id, name, rule, data, time"
 }
 
 func buildInvokedRuleMap(InvokedRule *domain.InvokedRule) map[string]interface{} {
 	invokedRuleData := sq.Eq{
-		"ruleName": InvokedRule.RuleName,
+		"ruleID": InvokedRule.Rule.ID,
 		"data": InvokedRule.Data,
 	}
 
 	return invokedRuleData
 }
 
-func InvokedRules() ([]*domain.InvokedRule) {
-	query, params, err := invokedRuleQuery().ToSql()
+func invokedRules(rawQuery *sq.SelectBuilder) []*domain.InvokedRule {
+	query, params, err := rawQuery.ToSql()
 	rows, err := conn.Query(query, params...)
 	if err != nil {
 		log.Print(err)
@@ -51,7 +56,8 @@ func InvokedRules() ([]*domain.InvokedRule) {
 	var invokedRules []*domain.InvokedRule
 	for rows.Next() {
 		var s domain.InvokedRule
-		err = rows.Scan(&s.ID, &s.RuleName, &s.Data)
+		s.Rule = domain.Rule{}
+		err = rows.Scan(&s.ID, &s.Rule.Name, &s.Rule.Rule, &s.Data, &s.Time)
 		if err != nil {
 			log.Print(err)
 		}
@@ -60,8 +66,18 @@ func InvokedRules() ([]*domain.InvokedRule) {
 	return invokedRules
 }
 
+func InvokedRules() ([]*domain.InvokedRule) {
+	return invokedRules(invokedRuleQuery())
+}
+
+func InvokedRulesByRule(ID int) ([]*domain.InvokedRule) {
+	queryByRule := invokedRuleQuery().Where("ruleid = ?", ID)
+	return invokedRules(&queryByRule)
+}
+
 func InvokedRule(ID int) *domain.InvokedRule {
 	var s domain.InvokedRule
+	s.Rule = domain.Rule{}
 	query, params, _ := invokedRuleQuery().Where("id=?", ID).ToSql()
 
 	err := scanInvokedRule(conn.QueryRow(query, params...), &s)
@@ -72,18 +88,16 @@ func InvokedRule(ID int) *domain.InvokedRule {
 	return &s
 }
 
-func CreateInvokedRule(newInvokedRule *domain.InvokedRule) *domain.InvokedRule {
-	var s domain.InvokedRule
+func CreateInvokedRule(newInvokedRule *domain.InvokedRule) {
 	query, params, _ := psql.Insert("invokedRule").
 						SetMap(buildInvokedRuleMap(newInvokedRule)).
-						Suffix(invokedRuleReturnField()).ToSql()
-
-	err := scanInvokedRule(conn.QueryRow(query, params...), &s)
+						ToSql()
+	log.Print(query)
+	log.Print(params)
+	_, err := conn.Exec(query, params...)
 	if err != nil {
 		log.Print(err)
 	}
-
-	return &s
 }
 
 func UpdateInvokedRule(ID int, newInvokedRule *domain.InvokedRule) *domain.InvokedRule {

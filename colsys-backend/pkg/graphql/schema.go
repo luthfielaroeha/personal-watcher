@@ -19,7 +19,7 @@ var Schema = `
 		sensor(id: ID!): Sensor
 		rules: [Rule]
 		rule(id: ID!): Rule
-		invokedRules: [InvokedRule]
+		invokedRules(ruleid: ID!): [InvokedRule]
 	}
 	
 	type Mutation {
@@ -61,7 +61,7 @@ var Schema = `
 		# Is this sensor active 
 		status: Boolean!
 		# Data of the sensor
-		sensordata: [SensorData]
+		sensordata(limit: Int): [SensorData]
 	}
 
 	enum SensorType {
@@ -113,6 +113,7 @@ var Schema = `
 		id: ID!
 		rulename: String
 		data: String
+		time: String!
 	}
 `
 

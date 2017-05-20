@@ -1,6 +1,11 @@
 const initialState = {
 	sidebarCollapsed: false,
-	selectedSensor: null
+	selectedSensor: {
+		trueid: null
+	},
+	selectedRule: {
+		id: null
+	}
 }
 
 const colsys = (state = initialState, action) => {
@@ -12,19 +17,28 @@ const colsys = (state = initialState, action) => {
 			}
 		case 'SELECT_SENSOR':
 			let showSensor;
-			if (state.selectedSensor === null) {
-				showSensor = action.sensor
+			if (state.selectedSensor.trueid === action.sensor.trueid) {
+				showSensor = initialState.selectedSensor
 			} else {
-				if (state.selectedSensor.trueid === action.sensor.trueid) {
-					showSensor = null
-				} else {
-					showSensor = action.sensor
-				}
+				showSensor = action.sensor
 			}
 
 			return {
 				...state,
-				selectedSensor: showSensor
+				selectedSensor: showSensor,
+				selectedRule: initialState.selectedRule
+			}
+		case 'SELECT_RULE':
+			let selectedRule
+			if (state.selectedRule.id === action.rule.id) {
+				selectedRule = initialState.selectedRule
+			} else {
+				selectedRule = action.rule
+			}
+			return {
+				...state,
+				selectedSensor: initialState.selectedSensor,
+				selectedRule
 			}
 		default:
 			return state

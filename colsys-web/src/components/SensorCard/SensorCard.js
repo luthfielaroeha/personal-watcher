@@ -22,15 +22,15 @@ const SensorCard = ({ title, loading, sensors, selectedSensor, changeSensor }) =
 				key='name'
 			/>
 			<Column
-				onCellClick={changeSensor}
+				onCellClick={(sensor) => {
+					changeSensor(sensor, selectedSensor.trueid)
+				}}
 				title='Status' 
 				dataIndex='status'
 				key='status'
 				className='text-right'
 				render={(status, sensor) => {
-					if (selectedSensor === null) {
-						return <Tag className='background color-red'>OFF</Tag>;
-					} else if (selectedSensor.trueid === sensor.trueid) {
+					if (selectedSensor.trueid === sensor.trueid) {
 						return <Tag className='background color-green'>ON</Tag>;
 					} else {
 						return <Tag className='background color-red'>OFF</Tag>;

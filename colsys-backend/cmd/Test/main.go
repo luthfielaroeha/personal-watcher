@@ -5,9 +5,5 @@ import (
 )
 
 func main() {
-	actions.SendEmail(
-		"wvhiegt@gmail.com",
-		"Test Send from Golang",
-		"Ntaps content from Golang",
-	)
+	actions.TestPush();
 }

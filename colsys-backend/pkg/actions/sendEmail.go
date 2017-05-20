@@ -39,7 +39,7 @@ func sendEmail(to string, subject string, content string) {
 }
 
 func SendEmail(invokedRule *domain.InvokedRule) {
-	// emailContent := invokedRule.RuleName + " has been fullfilled\n" +
+	// emailContent := invokedRule.Rule.Name + " has been fullfilled\n" +
 	// 				"Data : " + invokedRule.Data
 
 	// sendEmail("wvhiegt@gmail.com", "ColSys - Information", emailContent)

@@ -3,7 +3,7 @@
  *   relay-compiler
  *
  * @providesModule SensorCard_sensors.graphql
- * @generated SignedSource<<5dca23b5dc4dfe0a53092badfdeb8e5a>>
+ * @generated SignedSource<<9cfa2ac9eed33467184224b0c09308d9>>
  * @flow
  * @nogrep
  */
@@ -18,7 +18,6 @@ export type SensorCard_sensors = {|
   +id: string;
   +trueid: number;
   +name: string;
-  +sensordata: ?$ReadOnlyArray<?{| |}>;
 |};
 */
 
@@ -50,22 +49,6 @@ const fragment /*: ConcreteFragment*/ = {
       "alias": null,
       "args": null,
       "name": "name",
-      "storageKey": null
-    },
-    {
-      "kind": "LinkedField",
-      "alias": null,
-      "args": null,
-      "concreteType": "SensorData",
-      "name": "sensordata",
-      "plural": true,
-      "selections": [
-        {
-          "kind": "FragmentSpread",
-          "name": "SensorChart_sensordata",
-          "args": null
-        }
-      ],
       "storageKey": null
     }
   ],

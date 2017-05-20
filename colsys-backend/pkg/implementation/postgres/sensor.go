@@ -136,12 +136,12 @@ func RecordSensorData(sensorData *domain.SensorData) {
 	}
 }
 
-func GetSensorData(sensorID int) ([]*domain.SensorData) {
+func GetSensorData(sensorID int, limit int32) ([]*domain.SensorData) {
 	query, params, _ := psql.Select("val, time").
 		From("sensorData").
 		Where("sensorID=?", sensorID).
 		OrderBy("time DESC").
-		Limit(10).ToSql()
+		Limit(uint64(limit)).ToSql()
 
 	rows, err := conn.Query(query, params...)
 	if err != nil {

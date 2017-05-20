@@ -5,6 +5,7 @@ import DashboardComponent from 'components/Dashboard';
 const mapStateToProps = (state) => {
 	return {
 		selectedSensor: state.colsys.selectedSensor,
+		selectedRule: state.colsys.selectedRule,
 	}
 }
 

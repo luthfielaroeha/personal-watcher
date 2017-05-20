@@ -527,9 +527,9 @@ babel-plugin-jest-hoist@^18.0.0:
   version "18.0.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-jest-hoist/-/babel-plugin-jest-hoist-18.0.0.tgz#4150e70ecab560e6e7344adc849498072d34e12a"
 
-babel-plugin-relay@dev:
-  version "1.0.1-rc.4"
-  resolved "https://registry.yarnpkg.com/babel-plugin-relay/-/babel-plugin-relay-1.0.1-rc.4.tgz#bf3c32f537b683711dd784d97ec1f8ece6092f77"
+babel-plugin-relay@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/babel-plugin-relay/-/babel-plugin-relay-1.0.1.tgz#15e8a4f6fb488a39133a312595816dd9cf44f3a0"
   dependencies:
     babel-runtime "^6.23.0"
     graphql "^0.9.5"
@@ -1438,11 +1438,19 @@ cosmiconfig@^2.1.0, cosmiconfig@^2.1.1:
     parse-json "^2.2.0"
     require-from-string "^1.1.0"
 
-create-react-class@15.x, create-react-class@^15.5.1, create-react-class@^15.5.2:
+create-react-class@15.x, create-react-class@^15.5.2:
   version "15.5.2"
   resolved "https://registry.yarnpkg.com/create-react-class/-/create-react-class-15.5.2.tgz#6a8758348df660b88326a0e764d569f274aad681"
   dependencies:
     fbjs "^0.8.9"
+    object-assign "^4.1.1"
+
+create-react-class@^15.5.3:
+  version "15.5.3"
+  resolved "https://registry.yarnpkg.com/create-react-class/-/create-react-class-15.5.3.tgz#fb0f7cae79339e9a179e194ef466efa3923820fe"
+  dependencies:
+    fbjs "^0.8.9"
+    loose-envify "^1.3.1"
     object-assign "^4.1.1"
 
 cross-spawn@4.0.2:
@@ -4455,13 +4463,13 @@ promise@7.1.1, promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
-prop-types@15.x, prop-types@^15.0.0, prop-types@^15.5.4, prop-types@^15.5.6, prop-types@^15.5.7, prop-types@^15.5.8, prop-types@~15.5.7:
+prop-types@15.x, prop-types@^15.5.4, prop-types@^15.5.6, prop-types@^15.5.7, prop-types@^15.5.8, prop-types@~15.5.7:
   version "15.5.8"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.5.8.tgz#6b7b2e141083be38c8595aa51fc55775c7199394"
   dependencies:
     fbjs "^0.8.9"
 
-prop-types@^15.5.9:
+prop-types@^15.5.10, prop-types@^15.5.9:
   version "15.5.10"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.5.10.tgz#2797dfc3126182e3a95e3dfbb2e893ddd7456154"
   dependencies:
@@ -4878,27 +4886,27 @@ react-lazy-load@^3.0.10:
     lodash.debounce "^4.0.0"
     lodash.throttle "^4.0.0"
 
-react-redux@^5.0.4:
-  version "5.0.4"
-  resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-5.0.4.tgz#1563babadcfb2672f57f9ceaa439fb16bf85d55b"
+react-redux@^5.0.5:
+  version "5.0.5"
+  resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-5.0.5.tgz#f8e8c7b239422576e52d6b7db06439469be9846a"
   dependencies:
-    create-react-class "^15.5.1"
+    create-react-class "^15.5.3"
     hoist-non-react-statics "^1.0.3"
     invariant "^2.0.0"
     lodash "^4.2.0"
     lodash-es "^4.2.0"
     loose-envify "^1.1.0"
-    prop-types "^15.0.0"
+    prop-types "^15.5.10"
 
-react-relay@dev:
-  version "1.0.0-rc.4"
-  resolved "https://registry.yarnpkg.com/react-relay/-/react-relay-1.0.0-rc.4.tgz#f9d165db67977f2cbe51ba098b22070f154e3843"
+react-relay@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-relay/-/react-relay-1.0.0.tgz#e1dfe7795c1b3781ad2bc6f84495a4870c2842d7"
   dependencies:
     babel-runtime "^6.23.0"
     fbjs "^0.8.1"
     prop-types "^15.5.8"
     react-static-container "^1.0.1"
-    relay-runtime "1.0.0-rc.4"
+    relay-runtime "~1.0.0"
 
 react-resize-detector@0.4.1:
   version "0.4.1"
@@ -5137,9 +5145,9 @@ relateurl@0.2.x:
   version "0.2.7"
   resolved "https://registry.yarnpkg.com/relateurl/-/relateurl-0.2.7.tgz#54dbf377e51440aca90a4cd274600d3ff2d888a9"
 
-relay-compiler@dev:
-  version "1.0.0-rc.4"
-  resolved "https://registry.yarnpkg.com/relay-compiler/-/relay-compiler-1.0.0-rc.4.tgz#ec7aecf5f50e11b547799f41781b5168087cb846"
+relay-compiler@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/relay-compiler/-/relay-compiler-1.0.0.tgz#c61438ef503f7e9aa6c25938923aa2143c7c6a49"
   dependencies:
     babel-generator "6.24.0"
     babel-runtime "^6.23.0"
@@ -5150,13 +5158,13 @@ relay-compiler@dev:
     fbjs "^0.8.1"
     graphql "^0.9.5"
     immutable "^3.8.1"
-    relay-runtime "1.0.0-rc.4"
+    relay-runtime "~1.0.0"
     signedsource "^1.0.0"
     yargs "^7.0.2"
 
-relay-runtime@1.0.0-rc.4:
-  version "1.0.0-rc.4"
-  resolved "https://registry.yarnpkg.com/relay-runtime/-/relay-runtime-1.0.0-rc.4.tgz#948494c87ee563a6f5630f8b0937750b4eecaa3e"
+relay-runtime@~1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/relay-runtime/-/relay-runtime-1.0.0.tgz#3011ba84e844f154b14edf401950a8ed2c95cb2b"
   dependencies:
     babel-runtime "^6.23.0"
     fbjs "^0.8.1"

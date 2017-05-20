@@ -12,10 +12,13 @@
 /* ('10.151.32.124', 'Sensor 4','DATA', false) */
 /* ; */
 
-CREATE TABLE sensorData (
+DROP TABLE invokedRule;
+
+CREATE TABLE invokedRule (
 	id SERIAL PRIMARY KEY,
-	sensorID INT,
-	val TEXT,
-	time INT
+	ruleID INT,
+	data TEXT,
+	updatedAt TIMESTAMPTZ DEFAULT now(),
+	isDeleted BOOL DEFAULT false
 );
 

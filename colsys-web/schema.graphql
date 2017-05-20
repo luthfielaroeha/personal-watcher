@@ -11,7 +11,7 @@ type Query {
 	sensor(id: ID!): Sensor
 	rules: [Rule]
 	rule(id: ID!): Rule
-	invokedRules: [InvokedRule]
+	invokedRules(ruleid: ID!): [InvokedRule]
 }
 
 type Mutation {
@@ -53,7 +53,7 @@ type Sensor {
 	# Is this sensor active 
 	status: Boolean!
 	# Data of the sensor
-	sensordata: [SensorData]
+	sensordata(limit: Int): [SensorData]
 }
 
 enum SensorType {
@@ -105,4 +105,5 @@ type InvokedRule {
 	id: ID!
 	rulename: String
 	data: String
+	time: String!
 }

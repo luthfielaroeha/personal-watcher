@@ -3,8 +3,8 @@
  *   relay-compiler
  *
  * @providesModule DashboardQuery.graphql
- * @generated SignedSource<<79183874197e67fdc115291403341ea7>>
- * @relayHash 693d1b470aba691bbeec437f800d10ae
+ * @generated SignedSource<<fd41c343904b8d5541f72887f0fbfd73>>
+ * @relayHash 9e85f89053faaf4fe4b2832256aab5ab
  * @flow
  * @nogrep
  */
@@ -35,9 +35,6 @@ fragment SensorCard_sensors on Sensor {
   id
   trueid
   name
-  sensordata {
-    ...SensorChart_sensordata
-  }
 }
 
 fragment RuleCard_rules on Rule {
@@ -47,11 +44,6 @@ fragment RuleCard_rules on Rule {
   status
   rule
   actionID
-}
-
-fragment SensorChart_sensordata on SensorData {
-  val
-  time
 }
 */
 
@@ -139,37 +131,6 @@ const batch /*: ConcreteBatch*/ = {
                 "args": null,
                 "name": "name",
                 "storageKey": null
-              },
-              {
-                "kind": "LinkedField",
-                "alias": null,
-                "args": null,
-                "concreteType": "SensorData",
-                "name": "sensordata",
-                "plural": true,
-                "selections": [
-                  {
-                    "kind": "InlineFragment",
-                    "type": "SensorData",
-                    "selections": [
-                      {
-                        "kind": "ScalarField",
-                        "alias": null,
-                        "args": null,
-                        "name": "val",
-                        "storageKey": null
-                      },
-                      {
-                        "kind": "ScalarField",
-                        "alias": null,
-                        "args": null,
-                        "name": "time",
-                        "storageKey": null
-                      }
-                    ]
-                  }
-                ],
-                "storageKey": null
               }
             ]
           }
@@ -237,7 +198,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query DashboardQuery {\n  sensors {\n    ...SensorCard_sensors\n    id\n  }\n  rules {\n    ...RuleCard_rules\n    id\n  }\n}\n\nfragment SensorCard_sensors on Sensor {\n  id\n  trueid\n  name\n  sensordata {\n    ...SensorChart_sensordata\n  }\n}\n\nfragment RuleCard_rules on Rule {\n  id\n  name\n  index\n  status\n  rule\n  actionID\n}\n\nfragment SensorChart_sensordata on SensorData {\n  val\n  time\n}\n"
+  "text": "query DashboardQuery {\n  sensors {\n    ...SensorCard_sensors\n    id\n  }\n  rules {\n    ...RuleCard_rules\n    id\n  }\n}\n\nfragment SensorCard_sensors on Sensor {\n  id\n  trueid\n  name\n}\n\nfragment RuleCard_rules on Rule {\n  id\n  name\n  index\n  status\n  rule\n  actionID\n}\n"
 };
 
 module.exports = batch;

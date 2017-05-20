@@ -34,6 +34,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 					message.success("Rule " + rule.name + " deleted")
 				}
 			)
+		},
+		showInvoked: (rule) =>  {
+			dispatch({
+				type: 'SELECT_RULE',
+				rule
+			})
 		}
 	}
 }

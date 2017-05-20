@@ -1,10 +1,13 @@
 package domain
 
+import "time"
+
 type (
 	InvokedRule struct {
 		ID int
-		RuleName string
+		Rule Rule
 		Data string
+		Time time.Time
 	}
 )
 
