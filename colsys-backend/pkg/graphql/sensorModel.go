@@ -1,8 +1,6 @@
 package graphql
 
 import (
-	"strconv"
-
 	graphql "github.com/neelance/graphql-go"
 	"github.com/neelance/graphql-go/relay"
 	"colsys-backend/pkg/implementation/postgres"
@@ -76,8 +74,8 @@ func (s *sensorResolver) ID() graphql.ID {
 	return relay.MarshalID(sensorKind, s.s.ID)
 }
 
-func (s *sensorResolver) TrueID() string {
-	return "s" + strconv.Itoa(s.s.ID)
+func (s *sensorResolver) TrueID() int32 {
+	return int32(s.s.ID)
 }
 
 func (s *sensorResolver) Connection() string {
@@ -94,4 +92,26 @@ func (s *sensorResolver) Type() string {
 
 func (s *sensorResolver) Status() bool {
 	return s.s.Status
+}
+
+type sensorDataResolver struct {
+	sd *domain.SensorData
+}
+
+func (s *sensorResolver) SensorData() *[]*sensorDataResolver {
+	var datas []*sensorDataResolver
+	sensorsData := postgres.GetSensorData(s.s.ID)
+	for i := range sensorsData {
+		datas = append(datas, &sensorDataResolver{sensorsData[i]})
+	}
+
+	return &datas
+}
+
+func (sd *sensorDataResolver) Val() int32 {
+	return int32(sd.sd.Val)
+}
+
+func (sd *sensorDataResolver) Time() int32 {
+	return int32(sd.sd.Time)
 }

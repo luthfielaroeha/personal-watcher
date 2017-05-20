@@ -3,26 +3,27 @@
  *   relay-compiler
  *
  * @providesModule RuleCard_rules.graphql
- * @generated SignedSource<<3b62eb7165ae6653a4fa788015188ecc>>
+ * @generated SignedSource<<238499229cdee21f2cdfa420fa14c9bf>>
  * @flow
  * @nogrep
  */
+
+/* eslint-disable */
 
 'use strict';
 
 /*::
 import type {ConcreteFragment} from 'relay-runtime';
-export type RuleCard_rules = {
-  id: string;
-  name: string;
-  index: number;
-  status?: ?boolean;
-  rule: string;
-  actionID: number;
-};
+export type RuleCard_rules = {|
+  +id: string;
+  +name: string;
+  +index: number;
+  +status: ?boolean;
+  +rule: string;
+  +actionID: number;
+|};
 */
 
-/* eslint-disable comma-dangle, quotes */
 
 const fragment /*: ConcreteFragment*/ = {
   "argumentDefinitions": [],

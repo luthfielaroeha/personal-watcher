@@ -72,7 +72,7 @@ class InputRule extends Component {
 		const sensorOptions = sensors.map(sensor =>
 			<Select.Option 
 				key={sensor.id} 
-				value={sensor.trueid}
+				value={'s' + sensor.trueid}
 			>
 				{sensor.name}
 			</Select.Option>

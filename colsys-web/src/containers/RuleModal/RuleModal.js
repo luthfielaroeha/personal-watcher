@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { message } from 'antd';
+import { Form, message } from 'antd';
 
 import { hideRuleModal } from 'actions';
 import RuleModalComponent from 'components/RuleModal';
@@ -71,9 +71,28 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 	}
 }
 
+
+const RuleModalForm = Form.create({
+	onFieldsChange(ownProps, fields) {
+	},
+	mapPropsToFields(ownProps) {
+		return {
+			name: {
+				value: ownProps.rule.name,
+			},
+			action: {
+				value: ownProps.rule.actionID,
+			},
+			rule: {
+				value: ownProps.rule.rule,
+			}
+		}
+	}
+})(RuleModalComponent);
+
 const RuleModal = connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(RuleModalComponent);
+)(RuleModalForm);
 
 export default RuleModal

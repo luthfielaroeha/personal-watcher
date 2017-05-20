@@ -49,36 +49,14 @@ class RuleForm extends Component {
 		
 	}
 
-	_splitRule() {
-		const { getFieldDecorator } = this.props.form
-		const splitRule = this.props.item.rule.split(" ")
-
-		let initRuleList = [];
-
-		for(let ii=0;ii<splitRule.length;ii+=4) {
-			let sensorID = splitRule[ii].substr(1,splitRule[ii].indexOf(']') - 1)
-			let operator = splitRule[ii+1] 
-			let numberValue = splitRule[ii+2]
-			let logical = splitRule[ii+3] 
-			initRuleList.push({
-				sensorID,
-				operator,
-				numberValue,
-				logical,
-				key: uniqKey++,
-			});
-		}
-		getFieldDecorator('ruleList', { initialValue: initRuleList })
-	}
-
 	render() {
 		const { getFieldDecorator, getFieldValue } = this.props.form
-
 
 		if (this.props.item.rule) {
 			getFieldDecorator('ruleID', { initialValue: this.props.item.id })
 			getFieldDecorator('mode', { initialValue: 'edit' })
-			this._splitRule()
+			getFieldDecorator('ruleList', { initialValue: this.props.item.rule })
+			uniqKey += this.props.item.rule.length
 		} else {
 			getFieldDecorator('ruleList', { initialValue: [{ key: uniqKey }] })
 			getFieldDecorator('mode', { initialValue: 'add' })
@@ -116,7 +94,6 @@ class RuleForm extends Component {
 			<Select.Option key={action.id} value={String(action.trueid)}>{action.name}</Select.Option>
 		);
 
-
 		return (
 			<Form layout="horizontal">
 				<Form.Item label='Rule Name' hasFeedback {...formItemLayout}>
@@ -136,13 +113,16 @@ class RuleForm extends Component {
 				</Form.Item>
 				<Form.Item label='Action' hasFeedback {...formItemLayout}>
 					{getFieldDecorator('action', {
-						initialValue: String(this.props.item.actionID || ''),
+						initialValue: this.props.item.actionID || '',
 						rules: [{
 							required: true,
 							message: 'Please choose action'
 						}]
 					}) (
-						<Select placeholder='Please select an action'>
+						<Select placeholder='Please select an action'
+							showSearch
+							filterOption={ (input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0 }
+						>
 							{actionOpts}
 						</Select>
 					) }

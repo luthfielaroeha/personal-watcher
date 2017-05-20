@@ -12,22 +12,10 @@
 /* ('10.151.32.124', 'Sensor 4','DATA', false) */
 /* ; */
 
-DROP TABLE rule;
-
-CREATE TABLE rule (
+CREATE TABLE sensorData (
 	id SERIAL PRIMARY KEY,
-	actionID INT,
-	rule VARCHAR(255) DEFAULT '',
-	name VARCHAR(50),
-	index INT,
-	status BOOL, 
-	updatedAt TIMESTAMPTZ DEFAULT now(), 
-	isDeleted BOOL DEFAULT false
+	sensorID INT,
+	val TEXT,
+	time INT
 );
 
-INSERT INTO rule (actionID, name, index, status) VALUES  
-(1, 'Rule 1', 2, true),
-(2, 'Rule 2', 4, false),
-(3, 'Rule 3', 1, true),
-(4, 'Rule 4', 3, true)
-;

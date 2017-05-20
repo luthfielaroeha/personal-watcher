@@ -52,3 +52,19 @@ CREATE TABLE user_account (
 	updatedAt TIMESTAMPTZ DEFAULT now(),
 	isDeleted BOOL DEFAULT false
 );
+
+CREATE TABLE invokedRule (
+	id SERIAL PRIMARY KEY,
+	ruleName VARCHAR(50),
+	data TEXT,
+	updatedAt TIMESTAMPTZ DEFAULT now(),
+	isDeleted BOOL DEFAULT false
+);
+
+CREATE TABLE sensorData (
+	id SERIAL PRIMARY KEY,
+	sensorID INT,
+	val TEXT,
+	time INT
+);
+

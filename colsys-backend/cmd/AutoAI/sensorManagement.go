@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"sync"
 
+	"colsys-backend/pkg/domain"
 	"colsys-backend/pkg/implementation/postgres"
 
 	MQTT "github.com/eclipse/paho.mqtt.golang"
@@ -14,16 +15,11 @@ import (
 var mx = &sync.RWMutex{}
 var sensorData map[string]interface{}
 
-type sensorResponse struct {
-	SensorID string	`json:"sensorID"`
-	Value	 int	`json:"val"`
-}
-
 func prepareSensor() {
 	sensors := postgres.Sensors()
 	sensorData = make(map[string]interface{})
 	for i := range sensors {
-		sensorData["s" + strconv.Itoa(sensors[i].ID)] = false
+		sensorData["s" + strconv.Itoa(sensors[i].ID)] = 0
 	}
 
 	err := createMQTTSubscriber("building/#", 0, modifySensorData);
@@ -35,8 +31,10 @@ func prepareSensor() {
 func modifySensorData(client MQTT.Client, message MQTT.Message) {
 	mx.Lock()
 	defer mx.Unlock()
-	receivedSensorData := sensorResponse{}
+	receivedSensorData := domain.SensorData{}
 	json.Unmarshal(message.Payload(), &receivedSensorData)
 	sensorData["s" + receivedSensorData.SensorID] = receivedSensorData.Value
 	fmt.Println(sensorData)
+	go evaluateRules()
+	go postgres.RecordSensorData(&receivedSensorData)
 }

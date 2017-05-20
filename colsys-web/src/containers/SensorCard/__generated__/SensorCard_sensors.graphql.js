@@ -3,25 +3,25 @@
  *   relay-compiler
  *
  * @providesModule SensorCard_sensors.graphql
- * @generated SignedSource<<1c75d54e19328c0eef9240e23d7ac092>>
+ * @generated SignedSource<<5dca23b5dc4dfe0a53092badfdeb8e5a>>
  * @flow
  * @nogrep
  */
+
+/* eslint-disable */
 
 'use strict';
 
 /*::
 import type {ConcreteFragment} from 'relay-runtime';
-export type SensorCard_sensors = {
-  id: string;
-  name: string;
-  connection: string;
-  status: boolean;
-  type: "DATA" | "TIME";
-};
+export type SensorCard_sensors = {|
+  +id: string;
+  +trueid: number;
+  +name: string;
+  +sensordata: ?$ReadOnlyArray<?{| |}>;
+|};
 */
 
-/* eslint-disable comma-dangle, quotes */
 
 const fragment /*: ConcreteFragment*/ = {
   "argumentDefinitions": [],
@@ -42,28 +42,30 @@ const fragment /*: ConcreteFragment*/ = {
       "kind": "ScalarField",
       "alias": null,
       "args": null,
+      "name": "trueid",
+      "storageKey": null
+    },
+    {
+      "kind": "ScalarField",
+      "alias": null,
+      "args": null,
       "name": "name",
       "storageKey": null
     },
     {
-      "kind": "ScalarField",
+      "kind": "LinkedField",
       "alias": null,
       "args": null,
-      "name": "connection",
-      "storageKey": null
-    },
-    {
-      "kind": "ScalarField",
-      "alias": null,
-      "args": null,
-      "name": "status",
-      "storageKey": null
-    },
-    {
-      "kind": "ScalarField",
-      "alias": null,
-      "args": null,
-      "name": "type",
+      "concreteType": "SensorData",
+      "name": "sensordata",
+      "plural": true,
+      "selections": [
+        {
+          "kind": "FragmentSpread",
+          "name": "SensorChart_sensordata",
+          "args": null
+        }
+      ],
       "storageKey": null
     }
   ],

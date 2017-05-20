@@ -3,7 +3,7 @@ import { Card, Table, Tag } from 'antd';
 
 const { Column } = Table;
 
-const SensorCard = ({ title, loading, sensors }) => (
+const SensorCard = ({ title, loading, sensors, selectedSensor, changeSensor }) => (
 	<Card bordered={false}
 		title={title}
 		bodyStyle={{ padding: '0 10px' }}
@@ -22,15 +22,18 @@ const SensorCard = ({ title, loading, sensors }) => (
 				key='name'
 			/>
 			<Column
+				onCellClick={changeSensor}
 				title='Status' 
 				dataIndex='status'
 				key='status'
 				className='text-right'
 				render={(status, sensor) => {
-					if (status === false) {
+					if (selectedSensor === null) {
 						return <Tag className='background color-red'>OFF</Tag>;
-					} else {
+					} else if (selectedSensor.trueid === sensor.trueid) {
 						return <Tag className='background color-green'>ON</Tag>;
+					} else {
+						return <Tag className='background color-red'>OFF</Tag>;
 					}
 				}}
 			/>

@@ -22,7 +22,7 @@ function deleteByID(store, rootFieldName, deletedID) {
 
 function insertData(store, rootFieldName, newData) {
 	const record = store.getRoot()
-	let edges = record.getLinkedRecords(rootFieldName);
+	const edges = record.getLinkedRecords(rootFieldName);
 	if (!edges) {
 		return;
 	}

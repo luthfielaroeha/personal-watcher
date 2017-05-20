@@ -3,23 +3,24 @@
  *   relay-compiler
  *
  * @providesModule RuleForm_actions.graphql
- * @generated SignedSource<<8b963ad44a2aa1e6d5bf3dad24ba6463>>
+ * @generated SignedSource<<5a2e81beeb5a2313bff01114b19515fa>>
  * @flow
  * @nogrep
  */
+
+/* eslint-disable */
 
 'use strict';
 
 /*::
 import type {ConcreteFragment} from 'relay-runtime';
-export type RuleForm_actions = {
-  id: string;
-  trueid: number;
-  name?: ?string;
-};
+export type RuleForm_actions = {|
+  +id: string;
+  +trueid: number;
+  +name: ?string;
+|};
 */
 
-/* eslint-disable comma-dangle, quotes */
 
 const fragment /*: ConcreteFragment*/ = {
   "argumentDefinitions": [],

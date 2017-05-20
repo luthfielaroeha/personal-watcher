@@ -3,7 +3,8 @@ const initialState = {
 	title: '',
 	rule: {
 		name: '',
-		action: '',
+		actionID: '',
+		rule: ''
 	},
 }
 
@@ -23,11 +24,33 @@ const rulemodal = (state = initialState, action) => {
 				rule: initialState.rule
 			}
 		case 'EDIT_RULE':
+			const splitRule = action.rule.rule.split(" ")
+
+			let initRuleList = [];
+
+			for(let ii=0;ii<splitRule.length;ii+=4) {
+				const sensorID = splitRule[ii].substr(1,splitRule[ii].indexOf(']') - 1)
+				const operator = splitRule[ii+1] 
+				const numberValue = splitRule[ii+2]
+				const logical = splitRule[ii+3] || 'AND'
+				initRuleList.push({
+					sensorID,
+					operator,
+					numberValue,
+					logical,
+					key: ii/4
+				});
+			}		
+
 			return {
 				...state,
 				title: 'Edit Rule',
 				visibility: true,
-				rule: action.rule
+				rule: {
+					...action.rule,
+					rule: initRuleList,
+					actionID: String(action.rule.actionID || '')
+				}
 			}
 		default:
 			return state

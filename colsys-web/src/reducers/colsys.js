@@ -1,6 +1,6 @@
 const initialState = {
 	sidebarCollapsed: false,
-	selectedSensor: null,
+	selectedSensor: null
 }
 
 const colsys = (state = initialState, action) => {
@@ -11,9 +11,20 @@ const colsys = (state = initialState, action) => {
 				sidebarCollapsed: !state.sidebarCollapsed
 			}
 		case 'SELECT_SENSOR':
+			let showSensor;
+			if (state.selectedSensor === null) {
+				showSensor = action.sensor
+			} else {
+				if (state.selectedSensor.trueid === action.sensor.trueid) {
+					showSensor = null
+				} else {
+					showSensor = action.sensor
+				}
+			}
+
 			return {
 				...state,
-				selectedSensor: action.sensorID
+				selectedSensor: showSensor
 			}
 		default:
 			return state

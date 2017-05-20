@@ -18,9 +18,7 @@ class PersonalMQTT {
 		this.topicActionMap = {};
 	}
 
-	connect(actions) {
-		const actionNames = Object.keys(actions);
-		this.topicActionMap = invert(actions);
+	connect(action, store) {
 		this.mqtt.on('connect', () => {
 			console.log("Connected");
 			// store.dispatch({
@@ -28,9 +26,7 @@ class PersonalMQTT {
 			// 	message: 'Connected to MQTT broker',
 			// });
 
-			actionNames.forEach(action => {
-				this.mqtt.subscribe(actions[action], { qos: 0 });
-			});
+			this.mqtt.subscribe(action, { qos: 0 });
 		});
 
 		this.mqtt.on('disconnect', () => {
@@ -42,14 +38,10 @@ class PersonalMQTT {
 		});
 
 		this.mqtt.on('message', (topic, payload) => {
-			console.log(topic + ": " + payload.toString());
-			if (this.topicActionMap[topic]) {
-				// store.dispatch({
-				// 	type: this.topicActionMap[topic],
-				// 	payload: payload.toString(),
-				// 	topic: topic,
-				// });
-			}
+			store.dispatch({
+				type: 'ADD_SENSOR_DATA',
+				payload: payload.toString(),
+			});
 		});
 
 		this.mqtt.on('error', err => {

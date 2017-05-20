@@ -3,6 +3,7 @@ package postgres
 import (
 	"log"
 	"time"
+	"strconv"
 
 	"colsys-backend/pkg/domain"
 
@@ -117,4 +118,46 @@ func DeleteSensor(ID int) *domain.Sensor {
 	}
 
 	return &s
+}
+
+func RecordSensorData(sensorData *domain.SensorData) {
+	sID, _ := strconv.Atoi(sensorData.SensorID)
+	recordedData := sq.Eq{
+		"sensorID": sID,
+		"val": sensorData.Val,
+		"time": sensorData.Time,
+	}
+	query, params, _ := psql.Insert("sensorData").
+						SetMap(recordedData).ToSql()
+
+	_, err := conn.Exec(query, params...)
+	if err != nil {
+		log.Print(err)
+	}
+}
+
+func GetSensorData(sensorID int) ([]*domain.SensorData) {
+	query, params, _ := psql.Select("val, time").
+		From("sensorData").
+		Where("sensorID=?", sensorID).
+		OrderBy("time DESC").
+		Limit(10).ToSql()
+
+	rows, err := conn.Query(query, params...)
+	if err != nil {
+		log.Print(err)
+	}
+
+	defer rows.Close()
+
+	var datas []*domain.SensorData
+	for rows.Next() {
+		var sd domain.SensorData
+		err = rows.Scan(&sd.Val, &sd.Time)
+		if err != nil {
+			log.Print(err)
+		}
+		datas = append(datas, &sd)
+	}
+	return datas
 }

@@ -19,6 +19,7 @@ var Schema = `
 		sensor(id: ID!): Sensor
 		rules: [Rule]
 		rule(id: ID!): Rule
+		invokedRules: [InvokedRule]
 	}
 	
 	type Mutation {
@@ -51,7 +52,7 @@ var Schema = `
 		# The ID of the sensor
 		id: ID!
 		# How to connect to this sensor
-		trueid: String!
+		trueid: Int!
 		connection: String!
 		# What this sensor called
 		name: String!
@@ -60,7 +61,7 @@ var Schema = `
 		# Is this sensor active 
 		status: Boolean!
 		# Data of the sensor
-		# The sensor data exposed as a connection with edges
+		sensordata: [SensorData]
 	}
 
 	enum SensorType {
@@ -68,6 +69,11 @@ var Schema = `
 		DATA
 		# Sensor with data representation using time
 		TIME
+	}
+
+	type SensorData {
+		val: Int!
+		time: Int!
 	}
 
 	input SensorInput {
@@ -101,6 +107,12 @@ var Schema = `
 
 	input RuleDeleteInput {
 		id: ID!
+	}
+
+	type InvokedRule {
+		id: ID!
+		rulename: String
+		data: String
 	}
 `
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Modal } from 'antd';
+import { Modal } from 'antd';
 
 import environment from '../../libraries/RelayEnvironment';
 
@@ -46,7 +46,5 @@ let RuleModal = ({ visibility, title, form, rule, saveRule, hideModal }) => {
 		</Modal>
 	);
 }
-
-RuleModal = Form.create()(RuleModal);
 
 export default RuleModal;
