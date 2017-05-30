@@ -31,9 +31,9 @@ const SensorCard = ({ title, loading, sensors, selectedSensor, changeSensor }) =
 				className='text-right'
 				render={(status, sensor) => {
 					if (selectedSensor.trueid === sensor.trueid) {
-						return <Tag className='background color-green'>ON</Tag>;
+						return <Tag className='background color-blue'>HIDE</Tag>;
 					} else {
-						return <Tag className='background color-red'>OFF</Tag>;
+						return <Tag className='background color-blue'>SHOW</Tag>;
 					}
 				}}
 			/>

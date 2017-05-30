@@ -33,7 +33,7 @@ const chart = (state = initialState, action) => {
 		case 'ADD_SENSOR_DATAS': 
 			let newSensorDatas = []
 			for (const sensorData of action.sensorDatas) {
-				newSensorDatas.push(generateChartData(sensorData))
+				newSensorDatas.unshift(generateChartData(sensorData))
 			}
 			return {
 				...state,

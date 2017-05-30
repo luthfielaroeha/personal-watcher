@@ -11,7 +11,7 @@ function fetchQuery(
 		cacheConfig,
 		uploadables,
 		) {
-	return fetch('http://localhost:8080/graphql', {
+	return fetch('http://10.151.32.111:8080/graphql', {
 			mode: 'cors',
 			method: 'POST',
 			headers: { 'Accept': 'application/json',

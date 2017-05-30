@@ -102,7 +102,7 @@ func (s *sensorResolver) SensorData(args *struct{ Limit *int32 }) *[]*sensorData
 	var datas []*sensorDataResolver
 	var limit int32
 	if args.Limit == nil {
-		limit = 10
+		limit = 50
 	} else {
 		limit = *args.Limit
 	}

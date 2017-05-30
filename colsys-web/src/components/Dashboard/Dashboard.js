@@ -5,6 +5,7 @@ import ErrorCard from 'components/ErrorCard';
 import InvokedRuleCard from 'containers/InvokedRuleCard';
 import RuleCard from 'containers/RuleCard';
 import SensorCard from 'containers/SensorCard';
+import SensorDataCard from 'containers/SensorDataCard';
 import SensorChartCard from 'containers/SensorChartCard';
 
 import {
@@ -72,6 +73,7 @@ class Dashboard extends Component {
 				/>
 				<Col md={24}>
 					{this.props.selectedSensor.trueid !== null && <SensorChartCard />}
+					{this.props.selectedSensor.trueid !== null && <SensorDataCard />}
 					{this.props.selectedRule.id !== null && <InvokedRuleCard />}
 				</Col>
 			</Row>
