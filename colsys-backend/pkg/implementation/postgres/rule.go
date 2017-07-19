@@ -11,6 +11,16 @@ import (
 	pgx "github.com/jackc/pgx"
 )
 
+var actionMap map[int]*domain.Action
+
+func init() {
+	actionList := Actions()
+	actionMap = make(map[int]*domain.Action)
+	for i := range actionList {
+		actionMap[actionList[i].ID] = actionList[i]
+	}
+}
+
 func ruleQuery() *sq.SelectBuilder {
 	query := psql.Select("id, rule, name, index, status, actionID").From("rule").Where("isDeleted=?", false).OrderBy("updatedAt DESC")
 	return &query
@@ -60,7 +70,7 @@ func rules(rawQuery *sq.SelectBuilder) []*domain.Rule {
 		if err != nil {
 			log.Print(err)
 		}
-		rl.Action = *Action(rl.Action.ID)
+		rl.Action = *actionMap[rl.Action.ID]
 		rules = append(rules, &rl)
 	}
 
@@ -120,7 +130,7 @@ func UpdateRule(ID int, Rule *domain.Rule) *domain.Rule {
 func DeleteRule(ID int) *domain.Rule {
 	var rl domain.Rule
 	query, params, _ := updateRule().
-						SetMap(sq.Eq{"isDeleted":false}).
+						SetMap(sq.Eq{"isDeleted":true}).
 						Where("id=?", ID).
 						Suffix(ruleReturnField()).ToSql()
 

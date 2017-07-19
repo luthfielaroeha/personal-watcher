@@ -1,7 +1,7 @@
 package actions
 
 import (
-	"fmt"
+	// "fmt"
 	"time"
 	"encoding/json"
 
@@ -9,7 +9,9 @@ import (
 	"colsys-backend/pkg/domain"
 )
 
-func pushNotif(topic string, payload []byte) {
+var client MQTT.Client
+
+func init() {
 	broker := "tcp://10.151.32.111:1883"
 	password := ""
 	user := ""
@@ -26,14 +28,14 @@ func pushNotif(topic string, payload []byte) {
 	}
 
 	connOpts.AddBroker(broker)
-
-	client := MQTT.NewClient(connOpts)
+	client = MQTT.NewClient(connOpts)
 	if token := client.Connect(); token.Wait() && token.Error() != nil {
 		panic(token.Error())
 	}
-	defer client.Disconnect(250)
+}
 
-	fmt.Println("Sending notification")
+func pushNotif(topic string, payload []byte) {
+	// fmt.Println("Sending notification")
 	client.Publish(topic, byte(0), false, payload)
 }
 

@@ -13,7 +13,7 @@ func sendEmail(to string, subject string, content string) {
 	auth := smtp.PlainAuth(
 		"",
 		from,
-		"radcliffe",
+		"rahasia",
 		"smtp.gmail.com",
 	)
 

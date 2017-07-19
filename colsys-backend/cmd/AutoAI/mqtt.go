@@ -3,13 +3,17 @@ package main
 import (
 	"flag"
 	"time"
+	"strconv"
 
 	MQTT "github.com/eclipse/paho.mqtt.golang"
 )
 
 var connOpts *MQTT.ClientOptions
+var clientSeq int
 
 func createMQTTSubscriber(topic string, qos int, callback MQTT.MessageHandler) error {
+	connOpts.ClientID += strconv.Itoa(clientSeq)
+	clientSeq+=1
 	client := MQTT.NewClient(connOpts)
 	if token := client.Connect(); token.Wait() && token.Error() != nil {
 		return token.Error()
@@ -40,4 +44,5 @@ func init() {
 	}
 
 	connOpts.AddBroker(*broker)
+	clientSeq = 0
 }

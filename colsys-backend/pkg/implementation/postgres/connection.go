@@ -46,7 +46,7 @@ func extractConfig() pgx.ConnPoolConfig {
 
 	connPoolConfig := pgx.ConnPoolConfig{
 		ConnConfig: config,
-		MaxConnections: 5,
+		MaxConnections: 90,
 	}
 
 	return connPoolConfig

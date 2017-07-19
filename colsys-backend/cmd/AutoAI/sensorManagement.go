@@ -30,15 +30,27 @@ func prepareSensor() {
 	if (err != nil) {
 		fmt.Println(err)
 	}
+
+	err = createMQTTSubscriber("will/sensor", 0, turnOffSensor);
+	if (err != nil) {
+		fmt.Println(err)
+	}
+}
+
+func turnOffSensor(client MQTT.Client, message MQTT.Message) {
+	var sensorID int
+	json.Unmarshal(message.Payload(), &sensorID)
+	mx.Lock()
+	defer mx.Unlock()
+	sensorData["s" + strconv.Itoa(sensorID)] = false
 }
 
 func modifySensorData(client MQTT.Client, message MQTT.Message) {
-	mx.Lock()
-	defer mx.Unlock()
 	receivedSensorData := domain.SensorData{}
 	json.Unmarshal(message.Payload(), &receivedSensorData)
+	mx.Lock()
+	defer mx.Unlock()
 	sensorData["s" + receivedSensorData.SensorID] = receivedSensorData.Val
-	fmt.Println(sensorData)
 	go evaluateRules(receivedSensorData.SensorID)
 	go postgres.RecordSensorData(&receivedSensorData)
 }

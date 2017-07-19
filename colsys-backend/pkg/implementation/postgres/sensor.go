@@ -122,18 +122,11 @@ func DeleteSensor(ID int) *domain.Sensor {
 
 func RecordSensorData(sensorData *domain.SensorData) {
 	sID, _ := strconv.Atoi(sensorData.SensorID)
-	recordedData := sq.Eq{
-		"sensorID": sID,
-		"val": sensorData.Val,
-		"time": sensorData.Time,
-	}
-	query, params, _ := psql.Insert("sensorData").
-						SetMap(recordedData).ToSql()
 
-	_, err := conn.Exec(query, params...)
-	if err != nil {
-		log.Print(err)
-	}
+	conn.Exec("INSERT INTO sensorData (sensorID, val, time) VALUES ($1, $2, $3)", sID, sensorData.Val, sensorData.Time)
+	// if err != nil {
+	// 	log.Print(err)
+	// }
 }
 
 func GetSensorData(sensorID int, limit int32) ([]*domain.SensorData) {

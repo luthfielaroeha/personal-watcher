@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"time"
 	"strings"
 	"encoding/json"
@@ -38,7 +37,7 @@ func actionInvoker(rule *domain.Rule) {
 	expr, err := p.Parse()
 	if err != nil {
 		// ...
-		fmt.Println(err)
+		// fmt.Println(err)
 	}
 
 	mx.RLock()
@@ -47,10 +46,9 @@ func actionInvoker(rule *domain.Rule) {
 	mx.RUnlock()
 	if err != nil {
 		// ...
-		fmt.Println(err)
+		// fmt.Println(err)
 	}
 
-	fmt.Printf("%s:%t\n", rule.Name, r)
 	if r == true {
 		// TODO: get userdata to run function for specific user, pass it to params
 		jsonRes, _ := json.Marshal(savedData)

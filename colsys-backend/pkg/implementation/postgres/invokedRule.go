@@ -89,15 +89,10 @@ func InvokedRule(ID int) *domain.InvokedRule {
 }
 
 func CreateInvokedRule(newInvokedRule *domain.InvokedRule) {
-	query, params, _ := psql.Insert("invokedRule").
-						SetMap(buildInvokedRuleMap(newInvokedRule)).
-						ToSql()
-	log.Print(query)
-	log.Print(params)
-	_, err := conn.Exec(query, params...)
-	if err != nil {
-		log.Print(err)
-	}
+	conn.Exec("INSERT INTO invokedRule (ruleID, data) VALUES ($1, $2)", newInvokedRule.Rule.ID, newInvokedRule.Data)
+	// if err != nil {
+	// 	log.Print(err)
+	// }
 }
 
 func UpdateInvokedRule(ID int, newInvokedRule *domain.InvokedRule) *domain.InvokedRule {
